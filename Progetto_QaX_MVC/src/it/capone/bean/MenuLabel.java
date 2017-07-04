@@ -13,6 +13,7 @@ public class MenuLabel {
 		menu.add(new MenuItem("HomePage", "welcome.jsp") );
 		menu.add(new MenuItem("Login", "viewLogin.jsp"));
 		menu.add(new MenuItem("Logout", "welcome.jsp"));
+		menu.add(new MenuItem("Registrazione", "viewRegistrazione.jsp"));
 		
 	}
 	

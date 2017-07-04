@@ -1,8 +1,8 @@
 <!-- Estrapolo i dati inseriti nel Bean "DomandaBean" per popolare la pagina con le info sulla domanda -->
-<%@page import="it.capone.bean.RispostaBean"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%@page import="it.capone.utility.Data" %>
+<%@page import="it.capone.bean.RispostaBean"%>
 <jsp:useBean id="domanda" 
 		     class="it.capone.bean.DomandaBean" 
 			 scope="request">
@@ -38,9 +38,9 @@
             			<% 
             				if(!domanda.getRisposte().isEmpty()) {
             			%> 
-            				<table>
-            				<%		
-            					for(RispostaBean r : domanda.getRisposte()) {
+            				<%--<table>
+            				 <%		
+            					for(RispostaBean r : domanda.getRisposte().getListaRisposte()) {
             						String descr = r.getDescrizione();
             						Data dataRisp = r.getDataCreazione();
             						String utenteRisp = r.getUtente().getNome();
@@ -50,8 +50,9 @@
             					   <tr><td><h3>Data risposta</h3> :</td><td><%=dataRisp %></td></tr>
             				<% 
             					}
-            				%>	   
-            				</table>
+            				%>	    
+            				</table> --%>
+            					<h3>Ciao</h3>
             			<% } else { %>
             				<h3>Nessuna risposta data alla domanda</h3>
             			<% } %>

@@ -69,4 +69,13 @@ private List<RispostaBean> listaRisposte;
 		
 		return pulito;
 	}
+	
+	
+	public boolean isEmpty() {
+		boolean vuoto=false;
+		if(this.listaRisposte.isEmpty())
+			vuoto=true;
+		
+		return vuoto;
+	}
 }

@@ -14,6 +14,7 @@ public class DomandaBean {
 	private UtenteBean utente;
 	private RispostaBean rispostascelta;
 	private List<RispostaBean> risposte;
+	private ListaRisposteBean listaRisposte;
 
 
 	//Costruttore con parametri
@@ -95,13 +96,13 @@ public class DomandaBean {
 	}
 	
 	
-	public List<RispostaBean> getRisposte() {
-	    return risposte;
+	public ListaRisposteBean getRisposte() {
+	    return listaRisposte;
 	}
 
 	
-    public void setRisposte(List<RispostaBean> risposte) {
-	    this.risposte = risposte;
+    public void setRisposte(ListaRisposteBean listaRisposte) {
+	    this.listaRisposte = listaRisposte;
 	}
 
 	

@@ -11,7 +11,9 @@ import com.sun.istack.internal.logging.Logger;
 import it.capone.bean.CategoriaBean;
 import it.capone.bean.DomandaBean;
 import it.capone.bean.ListaDomandeBean;
+import it.capone.bean.ListaRisposteBean;
 import it.capone.bean.UtenteBean;
+import it.capone.db.ConnectionFactory;
 import it.capone.utility.Data;
 
 public class DomandaDAO {
@@ -95,14 +97,21 @@ public class DomandaDAO {
 	}
 	
 	
-	/*public DomandaBean getDomanda(int id) {
+	/**
+	 * 
+	 * @return Una domanda con la lista delle sue risposte
+	 */
+	public void getDomandaConRisposte(int id, DomandaBean domanda, ListaRisposteBean listaRisposta) {
 		Connection conn = null;
 	    Statement st = null;
 	    ResultSet rs = null;
+	
 	    try {
 	    	conn = it.capone.db.ConnectionFactory.getConnection();
 	    	st = conn.createStatement();
-	    	String query = "SELECT d.titolo, d.descrizione, u.nome , r.descrizione, r.datacreazione "+
+	    	String query = "SELECT d.titolo, d.descrizione as dDescrizione, "
+	    					+ " u.idutente as dUtente, u.nome , "
+	    					+ "r.descrizione as rDescrizione, r.datacreazione, r.iddomanda, r.idutente as rUtente "+
 	    				   "FROM qax.domanda as d, qax.utente as u, qax.risposta as r "+
 	    				   "WHERE d.idutente=u.idutente AND r.iddomanda=d.iddomanda AND d.iddomanda="+id;
 	    	rs=st.executeQuery(query);
@@ -111,28 +120,30 @@ public class DomandaDAO {
 		    	Timestamp d = rs.getTimestamp("datacreazione");
 		    	GregorianCalendar gc = new GregorianCalendar();
 	            gc.setTime(d);
+	            	            
+	            listaRisposta.creaRisposta(rs.getInt("idrisposta"), 
+	            						   rs.getString("rDescrizione"), 
+	            						   prendiUtente(rs.getInt("rUtente")), 
+	            						   new Data(
+	          	           	            			gc.get(GregorianCalendar.YEAR),
+	          	           	            		    gc.get(GregorianCalendar.MONTH) + 1,
+	          	           	            		    gc.get(GregorianCalendar.DATE)
+	          	           	            		    ), 	
+	            						   prendiDomanda(rs.getInt("iddomanda"))
+	            						   );
 	            
-	           
-	            
-	            listaDomanda.creaDomanda(rs.getInt("iddomanda"), 
-	            						rs.getString("titolo"), rs.getString("descrizione"), 
-	            						new Data(
-	           	            				 gc.get(GregorianCalendar.YEAR),
-	           	            		         gc.get(GregorianCalendar.MONTH) + 1,
-	           	            		         gc.get(GregorianCalendar.DATE)
-	           	            		         ), 
-	            						prendiCategoria(rs.getInt("categoria")), prendiUtente(rs.getInt("idutente"))
-	            						);
-	
+	            domanda.setTitolo(rs.getString("titolo"));
+	            domanda.setDescrizione(rs.getString("dDescrizione"));
+	            domanda.setUtente(prendiUtente(rs.getInt("dUtente")));
+	            domanda.setRisposte(listaRisposta);
 	
 		    }
-			//return listaDomande; //2° MODO
+			
 	    }	
 		catch(SQLException ex)
 	    {
 			Logger.getLogger(DomandaDAO.class.getName(), null).log(Level.SEVERE, null, ex);
-	    	System.out.println("Problema...: " +ex.getMessage());
-	    	//return null;
+	    	System.out.println("Problema nella query di getDomanda(): " +ex.getMessage());
 	    }
 	    finally
 	    {
@@ -150,9 +161,10 @@ public class DomandaDAO {
 	        }
 	        catch(Exception ex1)
 	        {
-	        	System.out.println("Eccezione: " +ex1.getMessage());
+	        	System.out.println("Eccezione generica: " +ex1.getMessage());
 	        }
-	}*/
+	    }
+	}
 	
 	
 	/**
@@ -252,7 +264,7 @@ public class DomandaDAO {
 	            return ut;
 	        } catch (SQLException ex) {
 	        	Logger.getLogger(DomandaDAO.class.getName(), null).log(Level.SEVERE, null, ex);
-		    	System.out.println("Problema...: " +ex.getMessage());
+		    	System.out.println("Problema in prendiUtente(): " +ex.getMessage());
 		    	return null;
 	        } finally {
 	            try {
@@ -296,7 +308,7 @@ public class DomandaDAO {
             return cat;
         } catch (SQLException ex) {
         	Logger.getLogger(DomandaDAO.class.getName(), null).log(Level.SEVERE, null, ex);
-	    	System.out.println("Problema...: " +ex.getMessage());
+	    	System.out.println("Problema in prendiCategoria(): " +ex.getMessage());
 	    	return null;
         } finally {
             try {
@@ -311,11 +323,65 @@ public class DomandaDAO {
                     conn.close();
                 }
             } catch (Exception ex1) {
-                System.out.println("Eccezione: " + ex1.getMessage());
+                System.out.println("Eccezione generica: " + ex1.getMessage());
             }
         }
     }
 
+	
+	/**
+	 * 
+	 * @param id
+	 * @return Un oggetto Domanda
+	 */
+	private static DomandaBean prendiDomanda(int iddomanda) {
+		
+		Connection conn = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try {
+			conn = it.capone.db.ConnectionFactory.getConnection();
+			ps = conn.prepareStatement("SELECT * FROM qax.domanda as d WHERE d.iddomanda = ?");
+			ps.setInt(1, iddomanda);
+			rs=ps.executeQuery();
+			rs.next();
+			Timestamp d = rs.getTimestamp("datacreazione");
+            GregorianCalendar gc = new GregorianCalendar();
+            gc.setTime(d);
+			DomandaBean domanda = new DomandaBean(rs.getInt("iddomanda"),
+											      rs.getString("titolo,"), rs.getString("descrizione"), 
+											      new Data(gc.get(GregorianCalendar.YEAR),
+											    		   gc.get(GregorianCalendar.MONTH) + 1,
+											    		   gc.get(GregorianCalendar.DATE)
+											    		   ),
+											      prendiCategoria(rs.getInt("categoria")),
+											      prendiUtente(rs.getInt("idutente"))
+											      );
+			return domanda;
+		}
+		catch(SQLException ex) {
+			Logger.getLogger(DomandaDAO.class.getName(), null).log(Level.SEVERE, null, ex);
+	    	System.out.println("Problema in prendiDomanda()....: " +ex.getMessage());
+	    	return null;
+		}
+		finally {
+			try{
+				if(rs != null)
+                {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+			}
+			catch(Exception ex1) {
+				 System.out.println("Eccezione generica: " + ex1.getMessage());
+			}
+		}
+	}
 	
 	
 	

@@ -14,6 +14,9 @@
         <div class="clearfix">    
             <div class = "column content">
             <h1>Login</h1>
+            	<% 
+            		
+            	%>
             	<form name="loginForm" method="post" action="welcome.jsp">
             		<p>
             			<label>Login: <input type="text" name="login"/></label>      
