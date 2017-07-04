@@ -46,7 +46,7 @@
             	<%
             	   }else {
             	%>
-            			<h1>Nessuna domanda ancora posta</h1>
+            			<h1>Nessun post ancora posto</h1>
             	<% } %>		
             </div>
             <jsp:include page="fragment/side.jsp" flush="true"/>
