@@ -1,5 +1,4 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <!-- Estrapolo i dati inseriti nel Bean per popolare la pagina con la lista delle prime 10 domande -->
 <jsp:useBean id="listaDomande" 
 		     class="it.capone.bean.ListaDomandeBean" 

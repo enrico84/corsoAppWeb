@@ -3,6 +3,11 @@
 -- INSERT  TAB. UTENTE
 INSERT INTO qax.utente(password,nome,email,dataregistrazione) VALUES 
                                   ('root', 'gianni', 'giannig@tiscali.it', now());
+INSERT INTO qax.utente(password,nome,email,dataregistrazione) VALUES 
+                                  ('bayern', 'dario', 'dariop@gmail.com', now());
+INSERT INTO qax.utente(password,nome,email,dataregistrazione) VALUES 
+                                  ('juve', 'enrico', 'enricoc@gmail.com', now());
+                                  
 
 -- INSERTI TAB. DOMANDA	
 INSERT INTO qax.domanda(titolo, descrizione, categoria, idutente, datacreazione, idrispostascelta) 

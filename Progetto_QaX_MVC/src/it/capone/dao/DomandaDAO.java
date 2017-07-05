@@ -107,11 +107,12 @@ public class DomandaDAO {
 	    ResultSet rs = null;
 	
 	    try {
+	    	listaRisposta = new ListaRisposteBean();
 	    	conn = it.capone.db.ConnectionFactory.getConnection();
 	    	st = conn.createStatement();
-	    	String query = "SELECT d.titolo, d.descrizione as dDescrizione, "
+	    	String query = "SELECT d.titolo, d.descrizione as dDescrizione, d.datacreazione ad dData"
 	    					+ " u.idutente as dUtente, u.nome , "
-	    					+ "r.descrizione as rDescrizione, r.datacreazione, r.iddomanda, r.idutente as rUtente "+
+	    					+ "r.idrisposta as idRisp, r.descrizione as rDescrizione, r.datacreazione, r.iddomanda, r.idutente as rUtente "+
 	    				   "FROM qax.domanda as d, qax.utente as u, qax.risposta as r "+
 	    				   "WHERE d.idutente=u.idutente AND r.iddomanda=d.iddomanda AND d.iddomanda="+id;
 	    	rs=st.executeQuery(query);
@@ -121,7 +122,7 @@ public class DomandaDAO {
 		    	GregorianCalendar gc = new GregorianCalendar();
 	            gc.setTime(d);
 	            	            
-	            listaRisposta.creaRisposta(rs.getInt("idrisposta"), 
+	            listaRisposta.creaRisposta(rs.getInt("idRisp"), 
 	            						   rs.getString("rDescrizione"), 
 	            						   prendiUtente(rs.getInt("rUtente")), 
 	            						   new Data(
@@ -131,9 +132,17 @@ public class DomandaDAO {
 	          	           	            		    ), 	
 	            						   prendiDomanda(rs.getInt("iddomanda"))
 	            						   );
-	            
+	          
+	            Timestamp dd = rs.getTimestamp("dData");
+		    	GregorianCalendar gcc = new GregorianCalendar();
+	            gcc.setTime(dd);
 	            domanda.setTitolo(rs.getString("titolo"));
 	            domanda.setDescrizione(rs.getString("dDescrizione"));
+	            domanda.setDatacreazione( new Data(
+ 	            							gcc.get(GregorianCalendar.YEAR),
+			     	            		    gcc.get(GregorianCalendar.MONTH) + 1,
+			     	            		    gcc.get(GregorianCalendar.DATE)
+			     	            		    ));
 	            domanda.setUtente(prendiUtente(rs.getInt("dUtente")));
 	            domanda.setRisposte(listaRisposta);
 	
@@ -349,7 +358,8 @@ public class DomandaDAO {
             GregorianCalendar gc = new GregorianCalendar();
             gc.setTime(d);
 			DomandaBean domanda = new DomandaBean(rs.getInt("iddomanda"),
-											      rs.getString("titolo,"), rs.getString("descrizione"), 
+											      rs.getString("titolo"), 
+											      rs.getString("descrizione"), 
 											      new Data(gc.get(GregorianCalendar.YEAR),
 											    		   gc.get(GregorianCalendar.MONTH) + 1,
 											    		   gc.get(GregorianCalendar.DATE)
