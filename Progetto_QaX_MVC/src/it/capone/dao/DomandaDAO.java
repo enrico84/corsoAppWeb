@@ -110,14 +110,14 @@ public class DomandaDAO {
 	    	listaRisposta = new ListaRisposteBean();
 	    	conn = it.capone.db.ConnectionFactory.getConnection();
 	    	st = conn.createStatement();
-	    	String query = "SELECT d.titolo, d.descrizione as dDescrizione, d.datacreazione ad dData"
+	    	String query = "SELECT d.titolo, d.descrizione as dDescrizione, d.datacreazione as dData,"
 	    					+ " u.idutente as dUtente, u.nome , "
 	    					+ "r.idrisposta as idRisp, r.descrizione as rDescrizione, r.datacreazione, r.iddomanda, r.idutente as rUtente "+
 	    				   "FROM qax.domanda as d, qax.utente as u, qax.risposta as r "+
 	    				   "WHERE d.idutente=u.idutente AND r.iddomanda=d.iddomanda AND d.iddomanda="+id;
 	    	rs=st.executeQuery(query);
 	    	
-		    if(rs.next()) {
+		    while(rs.next()) {
 		    	Timestamp d = rs.getTimestamp("datacreazione");
 		    	GregorianCalendar gc = new GregorianCalendar();
 	            gc.setTime(d);

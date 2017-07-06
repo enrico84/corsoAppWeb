@@ -27,10 +27,10 @@
            	    			Data data = domanda.getDatacreazione();
            	    			String utente = domanda.getUtente().getNome();            		
             			%>
-            				<tr><td><h3>Titolo</h3> :</td><td><%=titolo %></td></tr>
-            				<tr><td><h3>Descrizione</h3> :</td><td><%=descrizione %></td></tr>
-            				<tr><td><h3>Utente</h3> :</td><td><%=utente %></td></tr>
-            				<tr><td><h3>Data creazione</h3> :</td><td><%=data %></td></tr>
+            				<tr><td><h3>Titolo:</h3> </td><td><%=titolo %></td></tr>
+            				<tr><td><h3>Descrizione:</h3> </td><td><%=descrizione %></td></tr>
+            				<tr><td><h3>Utente:</h3> </td><td><%=utente %></td></tr>
+            				<tr><td><h3>Data creazione:</h3> </td><td><%=data %></td></tr>
             				<tr><td colspan="2"></td></tr>
             			</table>
             			<p>
@@ -38,21 +38,21 @@
             			<% 
             				if(!domanda.getRisposte().isEmpty()) {
             			%> 
-            				<%--<table>
+            				<h3>Risposte alla domanda di <%= utente %></h3>
+            				<table>
             				 <%		
             					for(RispostaBean r : domanda.getRisposte().getListaRisposte()) {
             						String descr = r.getDescrizione();
             						Data dataRisp = r.getDataCreazione();
             						String utenteRisp = r.getUtente().getNome();
             				%>
-            					   <tr><td><h3>Descrizione</h3> :</td><td><%=descr %></td></tr>
-            					   <tr><td><h3>Utente</h3> :</td><td><%=utenteRisp %></td></tr>
-            					   <tr><td><h3>Data risposta</h3> :</td><td><%=dataRisp %></td></tr>
+            					   <tr><td><h3>Descrizione</h3> </td><td><%=descr %></td></tr>
+            					   <tr><td><h3>Utente</h3> </td><td><%=utenteRisp %></td></tr>
+            					   <tr><td><h3>Data risposta</h3> </td><td><%=dataRisp %></td></tr>
             				<% 
             					}
             				%>	    
-            				</table> --%>
-            					<h3>Ciao</h3>
+            				</table>
             			<% } else { %>
             				<h3>Nessuna risposta data alla domanda</h3>
             			<% } %>
