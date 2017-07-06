@@ -9,6 +9,18 @@ INSERT INTO qax.utente(password,nome,email,dataregistrazione) VALUES
                                   ('juve', 'enrico', 'enricoc@gmail.com', now());
                                   
 
+-- INSERT TAB. CATEGORIA
+INSERT INTO `categoria` (`idcategoria`,`nome`) VALUES (1,'Java');
+INSERT INTO `categoria` (`idcategoria`,`nome`) VALUES (2,'Javascript');
+INSERT INTO `categoria` (`idcategoria`,`nome`) VALUES (3,'HTML');
+INSERT INTO `categoria` (`idcategoria`,`nome`) VALUES (4,'CSS');
+INSERT INTO `categoria` (`idcategoria`,`nome`) VALUES (5,'JQuery');
+INSERT INTO `categoria` (`idcategoria`,`nome`) VALUES (6,'SQL');
+INSERT INTO `categoria` (`idcategoria`,`nome`) VALUES (7,'Database');
+INSERT INTO `categoria` (`idcategoria`,`nome`) VALUES (8,'Web');
+INSERT INTO `categoria` (`idcategoria`,`nome`) VALUES (9,'JavaEE');
+
+                                  
 -- INSERTI TAB. DOMANDA	
 INSERT INTO qax.domanda(titolo, descrizione, categoria, idutente, datacreazione, idrispostascelta) 
 	    VALUES("Domanda numero 1", "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. 
@@ -139,17 +151,6 @@ INSERT INTO qax.risposta(descrizione, idutente, datacreazione, iddomanda)
 INSERT INTO qax.risposta(descrizione, idutente, datacreazione, iddomanda) 
 	    VALUES("Risp di Enrico alla domanda 2, bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla", 
 		        3, now(), 2); 
-              
-		        
--- INSERT TAB. CATEGORIA
-INSERT INTO `categoria` (`idcategoria`,`nome`) VALUES (1,'Java');
-INSERT INTO `categoria` (`idcategoria`,`nome`) VALUES (2,'Javascript');
-INSERT INTO `categoria` (`idcategoria`,`nome`) VALUES (3,'HTML');
-INSERT INTO `categoria` (`idcategoria`,`nome`) VALUES (4,'CSS');
-INSERT INTO `categoria` (`idcategoria`,`nome`) VALUES (5,'JQuery');
-INSERT INTO `categoria` (`idcategoria`,`nome`) VALUES (6,'SQL');
-INSERT INTO `categoria` (`idcategoria`,`nome`) VALUES (7,'Database');
-INSERT INTO `categoria` (`idcategoria`,`nome`) VALUES (8,'Web');
-INSERT INTO `categoria` (`idcategoria`,`nome`) VALUES (9,'JavaEE');
+             
 
 commit;                 

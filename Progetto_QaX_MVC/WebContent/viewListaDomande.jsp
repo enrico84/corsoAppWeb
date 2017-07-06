@@ -1,9 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <!-- Estrapolo i dati inseriti nel Bean per popolare la pagina con la lista delle prime 10 domande -->
 <jsp:useBean id="listaDomande" 
-		     class="it.capone.bean.ListaDomandeBean" 
-			 scope="request">
-</jsp:useBean> 
+	class="it.capone.bean.ListaDomandeBean" 
+	scope="request"/>
+<jsp:useBean id="loginBean" 
+	class="it.capone.bean.LoginBean" 
+	scope="session" />
 <%@page import="it.capone.bean.DomandaBean" %>
 <%@page import="it.capone.utility.Data" %>
 <html>

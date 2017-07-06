@@ -1,6 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<jsp:useBean id="errBean" 
+			class="it.capone.utility.ErrMsg" 
+			scope="request"/>
 <html>
     <head>
         <title>Login page</title>
@@ -15,11 +18,18 @@
             <div class = "column content">
             <h1>Login</h1>
             	<% 
-            		
+            		if(errBean.isListErr()) {
+            	%>	
+            		<p><%
+            			for(String err: errBean.getErrori()) 
+            				out.println("<p>"+err+"</p>");
+            			%>
+            	<% 	
+            		}
             	%>
-            	<form name="loginForm" method="post" action="welcome.jsp">
+            	<form name="loginForm" method="post" action="doLoginANDRegistrazione.jsp">
             		<p>
-            			<label>Login: <input type="text" name="login"/></label>      
+            			<label>Nome: <input type="text" name="nome"/></label>      
             			<label>Password: <input type="text" name="password"/></label>
             		</p>
             		<p><input type="submit" value="ENTRA"/></p>

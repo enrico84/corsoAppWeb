@@ -6,7 +6,7 @@
 $(document).ready(function(){
 	//registrazione degli event handler al caricamento della pagina
 	
-	$('input[name="login"]').blur(validaTesto);
+	$('input[name="nome"]').blur(validaTesto);
 	$('input[name="password"]').blur(validaTesto);
 	$('form[name="loginForm"]').submit(validaForm);
 });
@@ -27,7 +27,7 @@ function validaTesto(){
 
 //Controlla l'intero form al momento del submission
 function validaForm() {
-	if( $('input[name="login"]').val().length == 0 || $('input[name="password"]').val().length == 0) {
+	if( $('input[name="nome"]').val().length == 0 || $('input[name="password"]').val().length == 0) {
 		$("p#loginErr").text("Impossibile inviare il form, campi mancanti");
 		return false;
 	}

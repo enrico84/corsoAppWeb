@@ -24,7 +24,7 @@ public class ErrMsg {
 	}
 	
 	public boolean isListErr() {
-		return !this.errori.isEmpty();
+		return !errori.isEmpty();
 	}
 
 }

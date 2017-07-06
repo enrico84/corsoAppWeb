@@ -2,6 +2,7 @@ package it.capone.bean;
 
 import it.capone.dao.UtenteDAO;
 import it.capone.utility.Data;
+import it.capone.utility.ErrMsg;
 
 public class LoginBean {
 	
@@ -10,6 +11,17 @@ public class LoginBean {
 	private String nome;
 	private String email;
 	private Data dataregistrazione;
+	private boolean loggato;
+	private ErrMsg errs;
+
+	public LoginBean(int idUtente, String nome, String password, String email, Data dataregistrazione) {
+		this.idutente = idUtente;
+		this.nome = nome;
+		this.password = password;
+		this.email = email;
+		this.dataregistrazione = dataregistrazione;
+		this.errs = new ErrMsg();
+	}
 	
 	
 	/**
@@ -76,6 +88,49 @@ public class LoginBean {
 		this.dataregistrazione = dataregistrazione;
 	}
 	
+	
+	public ErrMsg getErrs() {
+		return errs;
+	}
+
+	
+	public void setErrs(ErrMsg errs) {
+		this.errs = errs;
+	}
+	
+	public String getErrorMsg() {
+		return "Utente o password non validi";
+	}
+	
+	public void setLoggato(boolean loggato) {
+		this.loggato = loggato;
+	}
+
+	public boolean isLoggato() {
+		return loggato;
+	}
+	
+	
+	/**
+	 * Controlla se i dati presenti nel bean sono validi per
+	 * entrare come utente loggato
+	 * 
+	 * @return true se è valido, false se ci sono dati mancanti o errati
+	 */
+	public boolean isValidLogin() {
+		boolean valid = false;
+		
+		if( (nome != null) && !(nome.isEmpty()) && !(nome.equals("")) ) {
+			if( (password != null) && !(password.isEmpty()) && !(password.equals("")) ) {
+				setLoggato(true);
+				valid = true;
+				
+			}
+		}
+		
+		return valid;	
+	}
+
 	
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
