@@ -117,6 +117,11 @@ public class DomandaDAO {
 	    				   "WHERE d.idutente=u.idutente AND r.iddomanda=d.iddomanda AND d.iddomanda="+id;
 	    	rs=st.executeQuery(query);
 	    	
+	    	String simpleQuery = "SELECT d.titolo, d.descrizione, d.datacreazione, u.idutente, u.nome "
+	    						 + "FROM qax.domanda as d, qax.utente as u "
+	    						 + "WHERE d.idutente=u.idutente AND d.iddomanda="+id;
+	    	
+	    	
 		    while(rs.next()) {
 		    	Timestamp d = rs.getTimestamp("datacreazione");
 		    	GregorianCalendar gc = new GregorianCalendar();
@@ -147,12 +152,123 @@ public class DomandaDAO {
 	            domanda.setRisposte(listaRisposta);
 	
 		    }
+		    
+		  
+		    
+		    if(domanda != null) {
+			    if((domanda.getTitolo() != null) && (domanda.getDescrizione() != null)){
+			    	if(rs != null)
+			        {
+			    		rs.close();
+			        }
+			    }
+			    else{
+			    	//Nel caso la prima query risulti vuota, ne creo una più semplice con solo le proprietà della Domanda
+			    	rs=st.executeQuery(simpleQuery);
+			    	while(rs.next()) {
+					    	Timestamp d = rs.getTimestamp("datacreazione");
+					    	GregorianCalendar gc = new GregorianCalendar();
+				            gc.setTime(d);
+				            	           				        
+				            domanda.setTitolo(rs.getString("titolo"));
+				            domanda.setDescrizione(rs.getString("descrizione"));
+				            domanda.setDatacreazione( new Data(
+			 	            							gc.get(GregorianCalendar.YEAR),
+						     	            		    gc.get(GregorianCalendar.MONTH) + 1,
+						     	            		    gc.get(GregorianCalendar.DATE)
+						     	            		    ));
+				            domanda.setUtente(prendiUtente(rs.getInt("idutente")));
+			    	}
+			    	if(rs != null)
+		            {
+		               rs.close();
+		            }
+			    }   
+			}
+		    else{
+		    	Logger.getLogger(DomandaDAO.class.getName(), null).log(Level.SEVERE, "La domanda è nulla, attenzione!");
+		    }
 			
 	    }	
 		catch(SQLException ex)
 	    {
 			Logger.getLogger(DomandaDAO.class.getName(), null).log(Level.SEVERE, null, ex);
 	    	System.out.println("Problema nella query di getDomanda(): " +ex.getMessage());
+	    }
+	    finally
+	    {
+	        try {
+	             if(st != null){
+	                st.close();
+	             }
+	             if(conn != null){
+	                conn.close();
+	             }
+	        }
+	        catch(Exception ex1)
+	        {
+	        	System.out.println("Eccezione generica: " +ex1.getMessage());
+	        }
+	    }
+	}
+	
+	
+	/**
+	 * 
+	 * @return Una lista delle prime 10 domande 
+	 */
+	public void getMieDomande(String username, String password, ListaDomandeBean myListaDomande) {
+		
+		//List<DomandaBean> listaDomande = new ArrayList<DomandaBean>(); //2° MODO: popolo una lista Locale e la ritorno
+		
+		Connection conn = null;
+	    Statement st = null;
+	    ResultSet rs = null;
+	    try {
+	    	conn = it.capone.db.ConnectionFactory.getConnection();
+	    	st = conn.createStatement();
+	    	String query = "SELECT * FROM qax.domanda as d, qax.utente as u "
+	    				   + "WHERE d.idutente=u.idutente AND u.nome='"+username+"' AND u.password='"+password+"' ORDER BY d.datacreazione";
+	    	rs=st.executeQuery(query); 
+	    	while(rs.next()) {
+		    	Timestamp d = rs.getTimestamp("datacreazione");
+	            GregorianCalendar gc = new GregorianCalendar();
+	            gc.setTime(d);
+	            
+	            myListaDomande.creaDomanda(rs.getInt("iddomanda"), 
+	            						rs.getString("titolo"), rs.getString("descrizione"), 
+	            						new Data(
+	           	            				 gc.get(GregorianCalendar.YEAR),
+	           	            		         gc.get(GregorianCalendar.MONTH) + 1,
+	           	            		         gc.get(GregorianCalendar.DATE)
+	           	            		         ), 
+	            						prendiCategoria(rs.getInt("categoria")), prendiUtente(rs.getInt("idutente"))
+	            						);
+	      
+//	            2° MODO
+//	            DomandaBean domanda = new DomandaBean(
+//	            		rs.getInt("iddomanda"), 
+//	            		rs.getString("titolo"),
+//	            		rs.getString("descrizione"), 
+//	            		new Data(
+//	            				 gc.get(GregorianCalendar.YEAR),
+//	            		         gc.get(GregorianCalendar.MONTH) + 1,
+//	            		         gc.get(GregorianCalendar.DATE)
+//	            		         ),
+//	            		prendiCategoria(rs.getInt("categoria")), 
+//	            		prendiUtente(rs.getInt("idutente")));
+//	            
+//	            	
+//	            listaDomande.add(domanda);  //2° MODO
+	            
+		    }
+			//return listaDomande; //2° MODO
+	    }	
+		catch(SQLException ex)
+	    {
+			Logger.getLogger(DomandaDAO.class.getName(), null).log(Level.SEVERE, null, ex);
+	    	System.out.println("Problema in : "+this.getClass().getSimpleName()+", eccezione:" +ex.getMessage());
+	    	//return null;
 	    }
 	    finally
 	    {
@@ -170,9 +286,10 @@ public class DomandaDAO {
 	        }
 	        catch(Exception ex1)
 	        {
-	        	System.out.println("Eccezione generica: " +ex1.getMessage());
+	        	System.out.println("Eccezione: " +ex1.getMessage());
 	        }
-	    }
+	   }
+		
 	}
 	
 	

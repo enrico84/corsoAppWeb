@@ -56,3 +56,15 @@ div.footer{
     float: left;
     padding: 15px;
 }
+
+hr.generic {
+	size: 1;
+	color: #66CC00; 
+	align: center;
+}
+
+hr.dettaglio {
+	size: 1; 
+	color: #FF0000; 
+	align: center;
+}

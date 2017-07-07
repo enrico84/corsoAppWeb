@@ -11,7 +11,6 @@ public class LoginBean {
 	private String nome;
 	private String email;
 	private Data dataregistrazione;
-	private boolean loggato;
 	private ErrMsg errs;
 
 	public LoginBean(int idUtente, String nome, String password, String email, Data dataregistrazione) {
@@ -21,6 +20,12 @@ public class LoginBean {
 		this.email = email;
 		this.dataregistrazione = dataregistrazione;
 		this.errs = new ErrMsg();
+	}
+	
+	public LoginBean()
+	{
+		//Costruttore Vuoto: rispetta il pattern di instanziazione dei bean
+		//Instanzia questo bean nelle view dove viene utilizzato
 	}
 	
 	
@@ -102,12 +107,13 @@ public class LoginBean {
 		return "Utente o password non validi";
 	}
 	
-	public void setLoggato(boolean loggato) {
-		this.loggato = loggato;
-	}
 
-	public boolean isLoggato() {
-		return loggato;
+	/**
+	 * Se l'utente è loggato, effettua un logout 
+	 */
+	public void clear() {
+		this.nome=null;
+		this.password=null;
 	}
 	
 	
@@ -122,7 +128,6 @@ public class LoginBean {
 		
 		if( (nome != null) && !(nome.isEmpty()) && !(nome.equals("")) ) {
 			if( (password != null) && !(password.isEmpty()) && !(password.equals("")) ) {
-				setLoggato(true);
 				valid = true;
 				
 			}

@@ -25,7 +25,7 @@
             	<% 
             		if(!listaDomande.getListaDomande().isEmpty()) {
            	    %>
-           	    		<h1>Ultimi 10 post</h1>
+           	    		<h1>Ultimi 10 post di <%=loginBean.getNome() %></h1>
            	    		<table>
            	    <%
            	    			
@@ -51,7 +51,7 @@
             	<%
             	   }else {
             	%>
-            			<h1>Nessun post ancora posto</h1>
+            			<h1>L'utente <%=loginBean.getNome() %> non ha inserito nessun post</h1>
             	<% } %>		
             </div>
             <jsp:include page="fragment/side.jsp" flush="true"/>

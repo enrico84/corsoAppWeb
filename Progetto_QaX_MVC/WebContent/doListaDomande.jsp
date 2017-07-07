@@ -5,8 +5,7 @@
 <%@page import="it.capone.dao.DomandaDAO" %>
 <jsp:useBean id="listaDomande" 
              class="it.capone.bean.ListaDomandeBean" 
-             scope="request">
-</jsp:useBean>
+             scope="request"/>
 <% 
 	
 	//creo un oggetto dao che interagisce con il db

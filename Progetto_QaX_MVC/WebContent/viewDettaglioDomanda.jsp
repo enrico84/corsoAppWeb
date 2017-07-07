@@ -32,13 +32,13 @@
             				<tr><td><h3>Utente:</h3> </td><td><%=utente %></td></tr>
             				<tr><td><h3>Data creazione:</h3> </td><td><%=data %></td></tr>
             				<tr><td colspan="2"></td></tr>
-            			</table>
+            			</table>            			
             			<p>
-            			
+            			<hr width="100%%" size="1" color="green" align="left">
             			<% 
-            				if(!domanda.getRisposte().isEmpty()) {
+            				if(domanda.getRisposte() != null && !domanda.getRisposte().isEmpty()) {
             			%> 
-            				<h3>Risposte alla domanda di <%= utente %></h3>
+            				<h2>Risposte alla domanda di <%= utente %></h2>
             				<table>
             				 <%		
             					for(RispostaBean r : domanda.getRisposte().getListaRisposte()) {
@@ -46,9 +46,10 @@
             						Data dataRisp = r.getDataCreazione();
             						String utenteRisp = r.getUtente().getNome();
             				%>
-            					   <tr><td><h3>Descrizione</h3> </td><td><%=descr %></td></tr>
-            					   <tr><td><h3>Utente</h3> </td><td><%=utenteRisp %></td></tr>
-            					   <tr><td><h3>Data risposta</h3> </td><td><%=dataRisp %></td></tr>
+            					   <tr><td><h3>Descrizione</h3> </td><td> <%=descr %></td></tr>
+            					   <tr><td><h3>Utente</h3> </td><td> <%=utenteRisp %></td></tr>
+            					   <tr><td><h3>Data risposta</h3> </td><td> <%=dataRisp %></td></tr>
+            					   <tr><td colspan=2><hr class="dettaglio"></td></tr>           					   
             				<% 
             					}
             				%>	    

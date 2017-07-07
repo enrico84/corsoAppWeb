@@ -3,5 +3,12 @@
 <!DOCTYPE html>
 <jsp:useBean id="loginBean" class="it.capone.bean.LoginBean" scope="session" />
 <div class = "column side">
-	SIDE
+<% 
+		if(loginBean.isValidLogin()) {
+			out.println("<h4>Benvenuto "+loginBean.getNome()+"</h4>");
+		}
+		else{
+			out.println("<h4>Benvenuto Utente Anonimo</h4>");
+		}
+%>
 </div>

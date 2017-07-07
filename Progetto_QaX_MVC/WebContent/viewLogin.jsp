@@ -33,6 +33,7 @@
             			<label>Password: <input type="text" name="password"/></label>
             		</p>
             		<p><input type="submit" value="ENTRA"/></p>
+            		<p><a href="doRegistrazione.jsp">Registrazione</a></p>
             		<p id="loginErr"></p>
             	</form>
             </div>

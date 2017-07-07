@@ -1,7 +1,5 @@
 package it.capone.bean;
 
-import java.util.List;
-
 import it.capone.utility.Data;
 
 public class DomandaBean {
@@ -13,7 +11,6 @@ public class DomandaBean {
 	private CategoriaBean categoria;
 	private UtenteBean utente;
 	private RispostaBean rispostascelta;
-	private List<RispostaBean> risposte;
 	private ListaRisposteBean listaRisposte;
 
 
@@ -104,7 +101,6 @@ public class DomandaBean {
     public void setRisposte(ListaRisposteBean listaRisposte) {
 	    this.listaRisposte = listaRisposte;
 	}
-
 	
 	
 	@Override

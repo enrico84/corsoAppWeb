@@ -24,7 +24,7 @@
 	{
 %>
 		<jsp:setProperty name="loginBean" property="nome" />
-		<jsp:setProperty name="loginBean" property="password" />
+		<jsp:setProperty name="loginBean" property="password" />		
 		<jsp:forward page="doListaDomande.jsp" />
 <%  }else { 
 		errBean.add(loginBean.getErrorMsg());
