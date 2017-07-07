@@ -28,7 +28,7 @@
            	    		<h1>Ultimi 10 post</h1>
            	    		<table>
            	    <%
-           	    			
+           	    			 
 	            			for(DomandaBean d : listaDomande.getListaDomande()) {
 	            		   		String titolo = d.getTitolo();
 	            		   		String descrizione = d.getDescrizione();
