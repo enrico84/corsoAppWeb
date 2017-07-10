@@ -1,9 +1,8 @@
 package it.capone.dao;
 
 import java.sql.*;
-import java.util.ArrayList;
+
 import java.util.GregorianCalendar;
-import java.util.List;
 import java.util.logging.Level;
 
 import com.sun.istack.internal.logging.Logger;
@@ -12,8 +11,7 @@ import it.capone.bean.CategoriaBean;
 import it.capone.bean.DomandaBean;
 import it.capone.bean.ListaDomandeBean;
 import it.capone.bean.ListaRisposteBean;
-import it.capone.bean.UtenteBean;
-import it.capone.db.ConnectionFactory;
+import it.capone.bean.LoginBean;
 import it.capone.utility.Data;
 
 public class DomandaDAO {
@@ -302,7 +300,7 @@ public class DomandaDAO {
 	 * @param datacreazione
 	 * @return Un oggetto Domanda
 	 */
-	public static DomandaBean creaDomanda(String titolo, String descrizione, CategoriaBean categoria, UtenteBean utente, 
+	public static DomandaBean creaDomanda(String titolo, String descrizione, CategoriaBean categoria, LoginBean utente, 
 			Data datacreazione) 
 	{
 		
@@ -361,13 +359,13 @@ public class DomandaDAO {
 	 * @param id
 	 * @return Un oggetto Utente
 	 */
-	private static UtenteBean prendiUtente(int id){
+	private static LoginBean prendiUtente(int id){
 	        Connection conn = null;
 	        PreparedStatement ps = null;
 	        ResultSet rs = null;
 	        try {
 	        	conn = it.capone.db.ConnectionFactory.getConnection();    
-	            ps = conn.prepareStatement("SELECT idutente, password, nome, email, dataregistrazione " +
+	            ps = conn.prepareStatement("SELECT idutente, nome, password, email, dataregistrazione " +
 	                    "FROM qax.utente " + 
 	                    "WHERE idutente = ?" );
 	            ps.setInt(1, id);
@@ -376,10 +374,10 @@ public class DomandaDAO {
 	            Timestamp d = rs.getTimestamp("dataregistrazione");
 	            GregorianCalendar gc = new GregorianCalendar();
 	            gc.setTime(d);
-	            UtenteBean ut = new UtenteBean(
+	            LoginBean ut = new LoginBean(
 	            		 				  rs.getInt("idutente"),
-	                                      rs.getString("password"),
-	                                      rs.getString("nome"),
+	            		 				  rs.getString("nome"),
+	            		 				  rs.getString("password"),
 	                                      rs.getString("email"),
 	                                      new Data(
 	             	            				 gc.get(GregorianCalendar.YEAR),

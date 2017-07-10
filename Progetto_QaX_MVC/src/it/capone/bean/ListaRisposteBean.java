@@ -19,7 +19,7 @@ private List<RispostaBean> listaRisposte;
 	}
 	
 	
-	public void creaRisposta(int idrisposta, String descrizione, UtenteBean utente, Data datacreazione, DomandaBean domanda) {
+	public void creaRisposta(int idrisposta, String descrizione, LoginBean utente, Data datacreazione, DomandaBean domanda) {
 		RispostaBean risposta = new RispostaBean(idrisposta, descrizione, utente, datacreazione, domanda);
 		this.listaRisposte.add(risposta);
 	}

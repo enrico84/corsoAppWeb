@@ -19,7 +19,7 @@ public class ListaDomandeBean {
 	}
 	
 	
-	public void creaDomanda(int id, String titolo, String descrizione, Data datacreazione, CategoriaBean categoria, UtenteBean utente) {
+	public void creaDomanda(int id, String titolo, String descrizione, Data datacreazione, CategoriaBean categoria, LoginBean utente) {
 		DomandaBean domanda = new DomandaBean(id, titolo, descrizione, datacreazione, categoria, utente);
 		this.listaDomande.add(domanda);
 	}

@@ -25,7 +25,7 @@
 	            			String titolo = domanda.getTitolo();
            	    			String descrizione = domanda.getDescrizione();
            	    			Data data = domanda.getDatacreazione();
-           	    			String utente = domanda.getUtente().getNome();            		
+           	    			String utente = domanda.getUtente().getNome();           		
             			%>
             				<tr><td><h3>Titolo:</h3> </td><td><%=titolo %></td></tr>
             				<tr><td><h3>Descrizione:</h3> </td><td><%=descrizione %></td></tr>
@@ -46,7 +46,11 @@
             						Data dataRisp = r.getDataCreazione();
             						String utenteRisp = r.getUtente().getNome();
             				%>
-            					   <tr><td><h3>Descrizione</h3> </td><td> <%=descr %></td></tr>
+            					   <tr><td><h3>Descrizione</h3> </td><td> <%=descr %></td>
+            					   <td><a href="doValutaRisposta.jsp" name="su"><img src="resources/freccia-su.jpg" alt="freccia su" style="width:20px;height:20px;"></a></td>
+            					   <td></td>
+            					   <td><a href="doValutaRisposta.jsp" name="giu"><img src="resources/freccia-giu.jpg" alt="freccia giu" style="width:30px;height:20px;"></a></td>
+            					   </tr>
             					   <tr><td><h3>Utente</h3> </td><td> <%=utenteRisp %></td></tr>
             					   <tr><td><h3>Data risposta</h3> </td><td> <%=dataRisp %></td></tr>
             					   <tr><td colspan=2><hr class="dettaglio"></td></tr>           					   

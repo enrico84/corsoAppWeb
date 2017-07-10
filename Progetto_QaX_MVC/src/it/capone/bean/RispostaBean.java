@@ -6,11 +6,11 @@ public class RispostaBean {
 	
 	private int idrisposta;
 	private String descrizione;
-	private UtenteBean utente;
+	private LoginBean utente;
 	private Data dataCreazione;
 	private DomandaBean domanda;
 	
-	public RispostaBean(int idrisposta, String descrizione, UtenteBean utente, Data data, DomandaBean domanda) {
+	public RispostaBean(int idrisposta, String descrizione, LoginBean utente, Data data, DomandaBean domanda) {
 		this.idrisposta = idrisposta;
 		this.descrizione = descrizione;
 		this.utente = utente;
@@ -44,14 +44,14 @@ public class RispostaBean {
 	/**
 	 * @return the utente
 	 */
-	public UtenteBean getUtente() {
+	public LoginBean getUtente() {
 		return utente;
 	}
 
 	/**
 	 * @param utente the utente to set
 	 */
-	public void setUtente(UtenteBean utente) {
+	public void setUtente(LoginBean utente) {
 		this.utente = utente;
 	}
 

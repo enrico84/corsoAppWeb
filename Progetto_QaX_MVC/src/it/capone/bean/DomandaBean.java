@@ -9,14 +9,14 @@ public class DomandaBean {
 	private String descrizione;
 	private Data datacreazione;
 	private CategoriaBean categoria;
-	private UtenteBean utente;
+	private LoginBean utente;
 	private RispostaBean rispostascelta;
 	private ListaRisposteBean listaRisposte;
 
 
 	//Costruttore con parametri
 	public DomandaBean(int iddomanda, String titolo, String descrizione, Data datacreazione, CategoriaBean categoria, 
-			           UtenteBean utente) {
+			LoginBean utente) {
 		this.iddomanda = iddomanda;
 		this.titolo = titolo;
 		this.descrizione = descrizione;
@@ -71,13 +71,13 @@ public class DomandaBean {
 
 
 	
-	public UtenteBean getUtente() {
+	public LoginBean getUtente() {
 		return utente;
 	}
 
 
 	
-	public void setUtente(UtenteBean utente) {
+	public void setUtente(LoginBean utente) {
 		this.utente = utente;
 	}
 

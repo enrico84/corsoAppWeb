@@ -42,7 +42,7 @@ function ajaxCompleta(testo) {
 	
 	
 	/** OPPURE SOLUZIONE CON JQUERY - AJAX */ 
-	$.get("ajaxCompletaCategoria.jsp?testo="+testo, 
+	$.get("ajaxCompletaCategoria.jsp?categoria="+testo, 
 		   function(risposta){  //il parametro di questa function ("risposta") è equivalente al xmlHttp.responseText invito dal server
 				$("span#completaCat").text(risposta);
 	});
@@ -50,7 +50,7 @@ function ajaxCompleta(testo) {
 	
 	/** ALTRA SOLUZIONE CON JQUERY - AJAX */
 	/** .load() prende la risposta del server e la inserisce negli elementi selezionati*/
-	//$("span#completaCat").load("ajaxCompletaCategoria.jsp?testo="+testo);
+	//$("span#completaCat").load("ajaxCompletaCategoria.jsp?categoria="+testo);
 }
 
 

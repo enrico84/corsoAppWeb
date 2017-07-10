@@ -12,7 +12,7 @@ $(document).ready(function(){
 });
 
 
-//Funzione chiamata all'evento "change" delle caselle di testo Login e Password
+//Funzione chiamata all'evento "blur" delle caselle di testo Login e Password
 function validaTesto(){
 	
 	//this -> nodo DOM della casella di input
