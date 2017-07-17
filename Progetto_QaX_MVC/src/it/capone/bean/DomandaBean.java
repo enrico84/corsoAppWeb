@@ -1,5 +1,8 @@
 package it.capone.bean;
 
+import java.sql.Date;
+import java.sql.Timestamp;
+
 import it.capone.utility.Data;
 
 public class DomandaBean {
@@ -8,6 +11,7 @@ public class DomandaBean {
 	private String titolo;
 	private String descrizione;
 	private Data datacreazione;
+	private Timestamp datacreaz;
 	private CategoriaBean categoria;
 	private LoginBean utente;
 	private RispostaBean rispostascelta;
@@ -24,6 +28,18 @@ public class DomandaBean {
 		this.categoria = categoria;
 		this.utente = utente;
 	}
+	
+	
+	//Costruttore con parametri
+	public DomandaBean(int iddomanda, String titolo, String descrizione, Timestamp datacreaz, CategoriaBean categoria, 
+			LoginBean utente) {
+		this.iddomanda = iddomanda;
+		this.titolo = titolo;
+		this.descrizione = descrizione;
+		this.datacreaz = datacreaz;
+		this.categoria = categoria;
+		this.utente = utente;
+		}
 	
 	//Costruttore vuoto
 	public DomandaBean() {}
@@ -56,6 +72,15 @@ public class DomandaBean {
 	
 	public void setDatacreazione(Data datacreazione) {
 		this.datacreazione = datacreazione;
+	}
+	
+	public Timestamp getDatacreaz() {
+		return datacreaz;
+	}
+
+
+	public void setDatacreaz(Timestamp datacreaz) {
+		this.datacreaz = datacreaz;
 	}
 
 	
@@ -100,6 +125,11 @@ public class DomandaBean {
 	
     public void setRisposte(ListaRisposteBean listaRisposte) {
 	    this.listaRisposte = listaRisposte;
+	}
+    
+    
+    public String getErrorMsg() {
+		return "Uno o più campi non validi";
 	}
 	
 	

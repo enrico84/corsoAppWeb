@@ -17,7 +17,7 @@ import it.capone.utility.Data;
 public class UtenteDAO {
 	
 	
-	public boolean verifyUtente(String userId, String password) {
+	public boolean verifyUtente(LoginBean loginBean, String userId, String password) {
 		Connection conn = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
@@ -31,8 +31,11 @@ public class UtenteDAO {
 			rs = ps.executeQuery();
 			
 			boolean exist=false;
-			if(rs.next())
+			if(rs.next()) {
+				int id = rs.getInt("idutente");
+				loginBean.setIdUtente(id);
 				exist = true;
+			}
 
 			return exist;
 			 

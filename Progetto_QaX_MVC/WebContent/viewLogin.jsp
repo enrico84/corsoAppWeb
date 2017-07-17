@@ -1,8 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="ISO-8859-1"%><!DOCTYPE html>
-<jsp:useBean id="errBean" 
-			class="it.capone.utility.ErrMsg" 
-			scope="request"/>
+<jsp:useBean id="errBean" class="it.capone.utility.ErrMsg" scope="request"/>
 <html>
     <head>
         <title>Login page</title>
@@ -21,12 +19,12 @@
             	%>	
             		<p><%
             			for(String err: errBean.getErrori()) 
-            				out.println("<p>"+err+"</p>");
+            				out.println("<p class='errMess'>"+err+"</p>");
             			%>
             	<% 	
             		}
             	%>
-            	<form name="loginForm" method="post" action="doLoginANDRegistrazione.jsp">
+            	<form name="loginForm" method="post" action="doLogin.jsp">
             		<p>
             			<label>Nome: <input type="text" name="nome"/></label>      
             			<label>Password: <input type="password" name="password"/></label>

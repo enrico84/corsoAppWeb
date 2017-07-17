@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@page import="it.capone.bean.DomandaBean"%>
 <%@page import="it.capone.utility.Data"%>
 <!-- 
@@ -13,7 +12,10 @@
 <html>
 <head>
 <title>Home page</title>
-<link rel="stylesheet" href="css/sito.css">
+<link type="text/css" rel="stylesheet" href="css/sito.css">
+<script type="text/javascript" src="js/jquery-3.2.1.js"></script>
+<script type="text/javascript" src="js/selezionaCategoria.js"></script>
+<script type="text/javascript" src="js/ricercaDomande.js"></script>
 </head>
 <body>
 	<jsp:include page="fragment/header.jsp" flush="true" />
@@ -25,7 +27,20 @@
             		if(!listaDomande.getListaDomande().isEmpty()) {
            	    %>
 			<h1>Ultimi 10 post</h1>
-			<table>
+			<div>
+				<form action="#" method="GET" name="formAutoCompl">
+					<p>
+						<label>Categoria: <input type="text" name="categoria"></label>
+						<span id="completaCat"></span>
+						<p>
+							<label><input type="submit" value="Cerca"></label>
+						</p>
+						<span id="completaDom"></span>
+					</p>
+					
+				</form>
+			</div>
+			<table id="tableDefault">
 				<%
            	    			
 	            			for(DomandaBean d : listaDomande.getListaDomande()) {
@@ -35,6 +50,7 @@
 										descrizione = descrizione.substring(0, 99);
 	            		   		String utente = d.getUtente().getNome();
 	            		   		Data datacreazione = d.getDatacreazione();
+	            		   		String categoria = d.getCategoria().getNome();
                  %>
 
 				<tr>
@@ -55,6 +71,10 @@
 				<tr>
 					<td>Data:</td>
 					<td><%=datacreazione %></td>
+				</tr>
+				<tr>
+					<td>Categoria:</td>
+					<td><span class="cat"><%=categoria %></span></td>
 				</tr>
 				<tr>
 					<td colspan=2><hr class="generic"></td>

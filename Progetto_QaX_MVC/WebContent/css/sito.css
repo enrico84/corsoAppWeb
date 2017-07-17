@@ -68,3 +68,11 @@ hr.dettaglio {
 	color: #FF0000; 
 	align: center;
 }
+
+p.errMess {
+	color: #FF0000;
+}
+
+span.cat {
+	background-color: #80ff80;
+}

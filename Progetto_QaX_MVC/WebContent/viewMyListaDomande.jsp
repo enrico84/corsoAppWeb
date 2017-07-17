@@ -14,7 +14,7 @@
 <html>
     <head>
         <title>Home page</title>
-        <link rel="stylesheet" href="css/sito.css">
+        <link type="text/css" rel="stylesheet" href="css/sito.css">
     </head>
     <body>
         <jsp:include page="fragment/header.jsp" flush="true"/>
@@ -25,7 +25,7 @@
             	<% 
             		if(!listaDomande.getListaDomande().isEmpty()) {
            	    %>
-           	    		<h1>Ultimi 10 post di <%=loginBean.getNome() %></h1>
+           	    		<h1>Ultimi post di <%=loginBean.getNome() %></h1>
            	    		<table>
            	    <%
            	    			
@@ -36,12 +36,14 @@
 										descrizione = descrizione.substring(0, 99);
 	            		   		String utente = d.getUtente().getNome();
 	            		   		Data datacreazione = d.getDatacreazione();
+	            		   		String categoria = d.getCategoria().getNome();
                  %>
                  				
-	                 			<tr><td>Domanda: </td><td><a href="doVisualizzaDomanda.jsp?iddomanda=<%=d.getIddomanda()%>"> <%=titolo %> </a></td></tr>
 	                 			<tr><td>Descrizione: </td><td><%=descrizione%></td></tr>
+	                 			<tr><td>Domanda: </td><td><a href="doVisualizzaDomanda.jsp?iddomanda=<%=d.getIddomanda()%>"> <%=titolo %> </a></td></tr>
 	                 			<tr><td>Utente: </td><td><%=utente %></td></tr>
 	                 			<tr><td>Data: </td><td><%=datacreazione %></td></tr>
+	                 			<tr><td>Categoria:</td><td><span class="cat"><%=categoria %></span></td></tr>
 	                 			<tr><td colspan=2><hr class="generic"></td></tr>
                  <%	
             	    		}

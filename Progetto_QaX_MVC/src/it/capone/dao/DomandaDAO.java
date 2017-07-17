@@ -3,6 +3,10 @@ package it.capone.dao;
 import java.sql.*;
 
 import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.logging.Level;
 
 import com.sun.istack.internal.logging.Logger;
@@ -31,6 +35,85 @@ public class DomandaDAO {
 	    	conn = it.capone.db.ConnectionFactory.getConnection();
 	    	st = conn.createStatement();
 	    	String query = "SELECT * FROM qax.domanda as d, qax.utente as u WHERE d.idutente=u.idutente ORDER BY d.datacreazione LIMIT 10";
+	    	rs=st.executeQuery(query);
+		    while(rs.next()) {
+		    	Timestamp d = rs.getTimestamp("datacreazione");
+	            GregorianCalendar gc = new GregorianCalendar();
+	            gc.setTime(d);
+	            
+	            listaDomande.creaDomanda(rs.getInt("iddomanda"), 
+	            						rs.getString("titolo"), rs.getString("descrizione"), 
+	            						new Data(
+	           	            				 gc.get(GregorianCalendar.YEAR),
+	           	            		         gc.get(GregorianCalendar.MONTH) + 1,
+	           	            		         gc.get(GregorianCalendar.DATE)
+	           	            		         ), 
+	            						prendiCategoria(rs.getInt("categoria")), prendiUtente(rs.getInt("idutente"))
+	            						);
+	      
+//	            2° MODO
+//	            DomandaBean domanda = new DomandaBean(
+//	            		rs.getInt("iddomanda"), 
+//	            		rs.getString("titolo"),
+//	            		rs.getString("descrizione"), 
+//	            		new Data(
+//	            				 gc.get(GregorianCalendar.YEAR),
+//	            		         gc.get(GregorianCalendar.MONTH) + 1,
+//	            		         gc.get(GregorianCalendar.DATE)
+//	            		         ),
+//	            		prendiCategoria(rs.getInt("categoria")), 
+//	            		prendiUtente(rs.getInt("idutente")));
+//	            
+//	            	
+//	            listaDomande.add(domanda);  //2° MODO
+	            
+		    }
+			//return listaDomande; //2° MODO
+	    }	
+		catch(SQLException ex)
+	    {
+			Logger.getLogger(DomandaDAO.class.getName(), null).log(Level.SEVERE, null, ex);
+	    	System.out.println("Problema...: " +ex.getMessage());
+	    	//return null;
+	    }
+	    finally
+	    {
+	        try {
+	             if(rs != null)
+	             {
+	                rs.close();
+	             }
+	             if(st != null){
+	                st.close();
+	             }
+	             if(conn != null){
+	                conn.close();
+	             }
+	        }
+	        catch(Exception ex1)
+	        {
+	        	System.out.println("Eccezione: " +ex1.getMessage());
+	        }
+	   }
+		
+	}
+	
+	
+	/**
+	 * 
+	 * @return Una lista delle prime 10 domande data la categoria
+	 */
+	public void getDomande(ListaDomandeBean listaDomande, String categoria) {
+		
+		//List<DomandaBean> listaDomande = new ArrayList<DomandaBean>(); //2° MODO: popolo una lista Locale e la ritorno
+		
+		Connection conn = null;
+	    Statement st = null;
+	    ResultSet rs = null;
+	    try {
+	    	conn = it.capone.db.ConnectionFactory.getConnection();
+	    	st = conn.createStatement();
+	    	String query = "select * from qax.domanda as d, qax.categoria as c WHERE d.categoria=c.idcategoria AND c.nome LIKE '"+categoria+"' LIMIT 10";
 	    	rs=st.executeQuery(query);
 		    while(rs.next()) {
 		    	Timestamp d = rs.getTimestamp("datacreazione");
@@ -300,37 +383,71 @@ public class DomandaDAO {
 	 * @param datacreazione
 	 * @return Un oggetto Domanda
 	 */
-	public static DomandaBean creaDomanda(String titolo, String descrizione, CategoriaBean categoria, LoginBean utente, 
-			Data datacreazione) 
+	public void creaDomanda(DomandaBean domanda, String titolo, String descrizione, String categoria, LoginBean utente) 
 	{
 		
 		Connection conn = null;
 		PreparedStatement ps=null;
 	    ResultSet rs = null;
+	    
 	    try {
 	    	conn = it.capone.db.ConnectionFactory.getConnection();
-	    	ps=conn.prepareStatement("INSERT INTO qax.domanda(titolo, descrizione, categoria, idutente, datacreazione) "+
-	                    "VALUES (?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
-	    	ps.setString(1, titolo);
-	    	ps.setString(2, descrizione);
-	    	ps.setInt(3, categoria.getId());
-	    	ps.setInt(4, utente.getIdutente());
+	    	CategoriaBean categ= prendiCategoriaByNome(categoria);
+	    	//Se la categoria non esiste la aggiungo nella tabella qax.Categoria
+	    	if(categ == null) {
+	    		int maxidCategoria = getMaxId("qax.categoria", "idcategoria");
+	    		maxidCategoria++;
+	    		PreparedStatement pss=null;
+	    	    ResultSet rss = null;
+	    		pss=conn.prepareStatement("INSERT INTO qax.categoria(idcategoria, nome) VALUES (?, ?)"); 
+	    		pss.setInt(1, maxidCategoria);
+	    		pss.setString(2, categoria);
+	    		
+	    		pss.executeUpdate();
+			    rss=pss.getResultSet();
+		        rss.next();
+				int id = rss.getInt(1);
+				categ = new CategoriaBean(id, categoria);
+				pss.close();
+				rss.close();
+	    	}
+	    	//Se la Categoria esiste, gliela passo
+	    		
+	    	ps=conn.prepareStatement("INSERT INTO qax.domanda(iddomanda, titolo, descrizione, categoria, idutente, datacreazione) "+
+	                 "VALUES (?, ?, ?, ?, now())");
 	    	
-	    	ps.setTimestamp(5, new Timestamp(new GregorianCalendar(
-                    datacreazione.getAnno(),
-                    datacreazione.getMese() - 1,
-                    datacreazione.getGiorno()).getTimeInMillis()));
+	    	int maxidDomanda = getMaxId("qax.domanda", "iddomanda");
+	    	maxidDomanda++;
+	    	ps.setInt(1, maxidDomanda);
+	    	ps.setString(2, titolo);
+		    ps.setString(3, descrizione);
+		    ps.setInt(4, categ.getId());
+		  
+		    ps.setInt(5, utente.getIdutente());
+		 
 			ps.executeUpdate();
-		    rs=ps.getGeneratedKeys();
-	        rs.next();
+			rs=ps.getResultSet();
+			rs.next();
+	        
 			int id = rs.getInt(1);
-			return new DomandaBean(id, titolo, descrizione, datacreazione, categoria, utente);
+			
+			Timestamp d = rs.getTimestamp("datacreazione");
+            GregorianCalendar gc = new GregorianCalendar();
+            gc.setTime(d);
+            Data nuovaData = new Data(
+     				 gc.get(GregorianCalendar.YEAR),
+      		         gc.get(GregorianCalendar.MONTH) + 1,
+      		         gc.get(GregorianCalendar.DATE)
+      		         );
+            
+            
+            domanda = new DomandaBean(id, titolo, descrizione, nuovaData, categ, utente);
+			
 	    }	
 		catch(SQLException ex)
 	    {
 			Logger.getLogger(DomandaDAO.class.getName(), null).log(Level.SEVERE, null, ex);
-	    	System.out.println("Problema...: " +ex.getMessage());
-	    	return null;
+	    	System.out.println("Problema in : " +this.getClass().getSimpleName()+ ", " +ex.getMessage());
 	    }
 	    finally
 	    {
@@ -352,6 +469,41 @@ public class DomandaDAO {
 	        }
 	   }
 	}
+	
+	
+	public int getMaxId(String tab, String id) {
+        Connection conn = null;
+        Statement st = null;
+        ResultSet res = null;
+
+        try {
+        	conn = it.capone.db.ConnectionFactory.getConnection();
+            st = conn.createStatement();
+            String sql = "SELECT MAX("+id+") FROM " +tab;
+
+           res = st.executeQuery(sql);
+
+            int ord;
+            if (res.next()) {
+                ord = res.getInt(1);
+                if (res.wasNull()) {    // in case of empty table
+                    ord = -1;
+                    // no elements => return (-1), so that first element will be #0
+                }
+            } else {
+                ord = -1;
+            }
+
+            res.close();
+            st.close();
+            conn.close();
+
+            return ord;
+        } catch (SQLException ex) {
+        	Logger.getLogger(DomandaDAO.class.getName(), null).log(Level.SEVERE, null, ex);
+            throw new RuntimeException("database error in " + this.getClass().getSimpleName(), ex);
+        }
+    }        
 	
 	
 	/**
@@ -433,6 +585,53 @@ public class DomandaDAO {
         } catch (SQLException ex) {
         	Logger.getLogger(DomandaDAO.class.getName(), null).log(Level.SEVERE, null, ex);
 	    	System.out.println("Problema in prendiCategoria(): " +ex.getMessage());
+	    	return null;
+        } finally {
+            try {
+                if(rs != null)
+                {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (Exception ex1) {
+                System.out.println("Eccezione generica: " + ex1.getMessage());
+            }
+        }
+    }
+	
+	
+	/**
+	 * 
+	 * @param nome
+	 * @return Verifica se una data Categoria esiste
+	 */
+	private CategoriaBean prendiCategoriaByNome(String nome){
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        //boolean exists = false;
+        //HashMap<Integer, String> mapCategory = new HashMap<Integer, String>();
+        try {
+        	conn = it.capone.db.ConnectionFactory.getConnection();    
+            ps = conn.prepareStatement("SELECT * FROM qax.categoria as q WHERE q.nome = ?" );
+                   
+            ps.setString(1, nome);
+            rs = ps.executeQuery();
+            CategoriaBean categoria = null;
+            if(rs.next())
+            	categoria = new CategoriaBean(rs.getInt("idcategoria"),
+						  rs.getString("nome"));
+            	//mapCategory.put(rs.getInt(1), rs.getString(2));
+             
+            return categoria;
+        } catch (SQLException ex) {
+        	Logger.getLogger(DomandaDAO.class.getName(), null).log(Level.SEVERE, null, ex);
+	    	System.out.println("Problema in prendiCategoria(nome): " +ex.getMessage());
 	    	return null;
         } finally {
             try {

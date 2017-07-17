@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
-<!DOCTYPE html>
+<jsp:useBean id="errBean" 
+			class="it.capone.utility.ErrMsg" 
+			scope="request"/><!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
@@ -14,6 +16,16 @@
 	 <div class="clearfix">    
             <div class = "column content">
             <h1>Registrazione</h1>
+            	<% 
+            		if(errBean.isListErr()) {
+            	%>	
+            		<p><%
+            			for(String err: errBean.getErrori()) 
+            				out.println("<p>"+err+"</p>");
+            			%>
+            	<% 	
+            		}
+            	%>
             <form name="regForm" method="post" action="doRegistration.jsp">
             		<table>
             		<tr><td>Username:</td><td><input type="text" name="nome"/></td></tr>      

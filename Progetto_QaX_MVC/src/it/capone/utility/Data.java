@@ -74,4 +74,33 @@ public class Data {
             data=this.getGiorno()+"/"+this.getMese()+"/"+this.getAnno();
             return data;
         }
+
+		
+		public void setAnno(int anno) {
+			this.anno = anno;
+		}
+
+		public void setMese(int mese) {
+			this.mese = mese;
+		}
+
+		
+		public void setGiorno(int giorno) {
+			this.giorno = giorno;
+		}
+
+		
+		public void setOre(int ore) {
+			this.ore = ore;
+		}
+
+		
+		public void setMinuti(int minuti) {
+			this.minuti = minuti;
+		}
+
+		
+		public void setSecondi(int secondi) {
+			this.secondi = secondi;
+		}
 }

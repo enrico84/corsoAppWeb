@@ -36,6 +36,10 @@ public class LoginBean {
 		return idutente;
 	}
 	
+	public void setIdUtente(int id) {
+		this.idutente = id;
+	}
+	
 	/**
 	 * @return the password
 	 */
@@ -105,6 +109,11 @@ public class LoginBean {
 	
 	public String getErrorMsg() {
 		return "Utente o password non validi";
+	}
+	
+	
+	public String getErrorRegMsg() {
+		return "Uno o più campi non sono validi";
 	}
 	
 

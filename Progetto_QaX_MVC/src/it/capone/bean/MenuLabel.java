@@ -29,6 +29,7 @@ public class MenuLabel {
 			menu.add(new MenuItem("Le mie Domande", "doMieDomande.jsp"));
 			menu.add(new MenuItem("Logout", "doLogout.jsp"));
 		}
+		menu.add(new MenuItem("Fai una domanda", "viewCreaDomanda.jsp") );
 	}
 
 	public List<MenuItem> getMenu() {
