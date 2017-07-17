@@ -309,7 +309,7 @@ public class DomandaDAO {
 	    	conn = it.capone.db.ConnectionFactory.getConnection();
 	    	st = conn.createStatement();
 	    	String query = "SELECT * FROM qax.domanda as d, qax.utente as u "
-	    				   + "WHERE d.idutente=u.idutente AND u.nome='"+username+"' AND u.password='"+password+"' ORDER BY d.datacreazione";
+	    				   + "WHERE d.idutente=u.idutente AND u.nome='"+username+"' AND u.password='"+password+"' ORDER BY d.datacreazione DESC";
 	    	rs=st.executeQuery(query); 
 	    	while(rs.next()) {
 		    	Timestamp d = rs.getTimestamp("datacreazione");
@@ -392,29 +392,24 @@ public class DomandaDAO {
 	    
 	    try {
 	    	conn = it.capone.db.ConnectionFactory.getConnection();
-	    	CategoriaBean categ= prendiCategoriaByNome(categoria);
+	    	CategoriaBean categ = prendiCategoriaByNome(categoria);
 	    	//Se la categoria non esiste la aggiungo nella tabella qax.Categoria
 	    	if(categ == null) {
 	    		int maxidCategoria = getMaxId("qax.categoria", "idcategoria");
 	    		maxidCategoria++;
 	    		PreparedStatement pss=null;
-	    	    ResultSet rss = null;
 	    		pss=conn.prepareStatement("INSERT INTO qax.categoria(idcategoria, nome) VALUES (?, ?)"); 
 	    		pss.setInt(1, maxidCategoria);
 	    		pss.setString(2, categoria);
 	    		
 	    		pss.executeUpdate();
-			    rss=pss.getResultSet();
-		        rss.next();
-				int id = rss.getInt(1);
-				categ = new CategoriaBean(id, categoria);
+				categ = new CategoriaBean(maxidCategoria, categoria);
 				pss.close();
-				rss.close();
 	    	}
 	    	//Se la Categoria esiste, gliela passo
 	    		
 	    	ps=conn.prepareStatement("INSERT INTO qax.domanda(iddomanda, titolo, descrizione, categoria, idutente, datacreazione) "+
-	                 "VALUES (?, ?, ?, ?, now())");
+	                 "VALUES (?, ?, ?, ?, ?, now())", Statement.RETURN_GENERATED_KEYS);
 	    	
 	    	int maxidDomanda = getMaxId("qax.domanda", "iddomanda");
 	    	maxidDomanda++;
@@ -422,26 +417,25 @@ public class DomandaDAO {
 	    	ps.setString(2, titolo);
 		    ps.setString(3, descrizione);
 		    ps.setInt(4, categ.getId());
-		  
 		    ps.setInt(5, utente.getIdutente());
 		 
 			ps.executeUpdate();
-			rs=ps.getResultSet();
-			rs.next();
-	        
-			int id = rs.getInt(1);
-			
-			Timestamp d = rs.getTimestamp("datacreazione");
-            GregorianCalendar gc = new GregorianCalendar();
-            gc.setTime(d);
-            Data nuovaData = new Data(
-     				 gc.get(GregorianCalendar.YEAR),
-      		         gc.get(GregorianCalendar.MONTH) + 1,
-      		         gc.get(GregorianCalendar.DATE)
-      		         );
-            
-            
-            domanda = new DomandaBean(id, titolo, descrizione, nuovaData, categ, utente);
+//			rs=ps.getGeneratedKeys();
+//			rs.next();
+//	        
+//			int id = rs.getInt(1);
+//			
+//			Timestamp d = rs.getTimestamp("datacreazione");
+//            GregorianCalendar gc = new GregorianCalendar();
+//            gc.setTime(d);
+//            Data nuovaData = new Data(
+//     				 gc.get(GregorianCalendar.YEAR),
+//      		         gc.get(GregorianCalendar.MONTH) + 1,
+//      		         gc.get(GregorianCalendar.DATE)
+//      		         );
+//            
+//            
+//            domanda = new DomandaBean(id, titolo, descrizione, nuovaData, categ, utente);
 			
 	    }	
 		catch(SQLException ex)

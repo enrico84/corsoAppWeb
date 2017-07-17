@@ -28,8 +28,7 @@ if( (titolo != null && !(titolo.equals(""))) &&
 			&& (categoria != null && !(categoria.equals("")) && loginBean.getIdutente() > 0)  ) {  ///OK 
 				
 			domandaDAO.creaDomanda(domandaBean, titolo, descrizione, categoria, loginBean);
-			response.sendRedirect("viewMyListaDomande.jsp");
-			//<jsp:forward page="doListaDomande.jsp" />
+			response.sendRedirect("doMieDomande.jsp");		
 
 } else { 
 		errBean.add(domandaBean.getErrorMsg());    //CONTROLLO ERRORI LATO SERVER 
