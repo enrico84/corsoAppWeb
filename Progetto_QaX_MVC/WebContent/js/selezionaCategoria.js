@@ -1,11 +1,11 @@
 /**
- * JQuery relativo all'autocompletamento
+ * JQuery relativo all'autocompletamento collegato alla View "viewListaDomande" 
+ * quando si digita qualcosa nella casella di ricerca delle Domande
  */
 $(document).ready(function(){
 	//registrazione degli event handler al caricamento della pagina
 	
 	$("input[name='categoria']").keyup(completa);
-	$("select[name='categoria']").change(popola);
 	
 });
 
@@ -27,16 +27,6 @@ function completa() {
 }
 
 
-//Popola la <select> in maniera dinamica non appena l'utente clicca su di essa
-function popola() {
-	
-	$.get("ajaxPopolaCategoria.jsp", 
-			function(risposta){      //il parametro "risposta" contiene la risposta inviata dal server
-				$("select[name='categoria']").html(risposta);
-			});
-
-}
-
 function ajaxCompleta(testo) {
 	/**SOLUZIONE STANDARD CON AJAX PURO*/
 	
@@ -54,7 +44,7 @@ function ajaxCompleta(testo) {
 	
 	
 	/** OPPURE SOLUZIONE CON JQUERY - AJAX */ 
-	$.get("ajaxCompletaCategoria.jsp?categoria="+testo, 
+	$.get("ajax/ajaxCompletaCategoria.jsp?categoria="+testo, 
 		   function(risposta){  //il parametro di questa function ("risposta") è equivalente al xmlHttp.responseText inviato dal server
 				$("span#completaCat").text(risposta);
 	});

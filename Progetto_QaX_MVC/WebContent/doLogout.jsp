@@ -5,8 +5,9 @@
 <jsp:useBean id="loginBean" class="it.capone.bean.LoginBean" scope="session" />
 <% 
 	loginBean.clear();
-   //passa il controllo a viewLista per impaginarle/visualizzarle
-	//response.sendRedirect("viewListaDomande.jsp");
+   
+	//passa il controllo a viewLista per impaginarle/visualizzarle
+	
 %>
 <jsp:forward page="doListaDomande.jsp"></jsp:forward>
 

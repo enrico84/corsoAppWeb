@@ -1,5 +1,6 @@
 /**
  * JQuery relativo alla ricerca Asincrona(Ajax-style) delle domande
+ * collegato al pulsante "Cerca" della View "viewListaDomande"
  */
 
 $(document).ready(function() {
@@ -67,8 +68,8 @@ function ajaxCercaDomanda(contenuto) {
 	
 	/** ALTRA SOLUZIONE CON JQUERY - AJAX */
 	$.ajax({
-		  url:"ajaxRicercaDomanda.jsp",
-		  type: "GET",
+		  url:"ajax/ajaxRicercaDomanda.jsp",
+		  type: "POST",
 		  data: { categoriaDomanda: contenuto},
 		  success:function(result){
 			  $("table#tableDefault").hide();

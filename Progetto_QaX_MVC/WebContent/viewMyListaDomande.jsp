@@ -39,12 +39,16 @@
 	            		   		String categoria = d.getCategoria().getNome();
                  %>
                  				
-	                 			<tr><td>Descrizione: </td><td><%=descrizione%></td></tr>
+	                 			<tr>
+	                 				<td>Descrizione: </td><td><%=descrizione%></td>
+	                 				<td></td><td><a href="doElimina-ModificaDomanda.jsp?iddomanda=<%=d.getIddomanda()%>&tipo=elimina">Elimina</a></td>
+	                 				<td></td><td><a href="doElimina-ModificaDomanda.jsp?iddomanda=<%=d.getIddomanda()%>&tipo=modifica">Modifica</a></td>		
+	                 			</tr>
 	                 			<tr><td>Domanda: </td><td><a href="doVisualizzaDomanda.jsp?iddomanda=<%=d.getIddomanda()%>"> <%=titolo %> </a></td></tr>
 	                 			<tr><td>Utente: </td><td><%=utente %></td></tr>
 	                 			<tr><td>Data: </td><td><%=datacreazione %></td></tr>
 	                 			<tr><td>Categoria:</td><td><span class="cat"><%=categoria %></span></td></tr>
-	                 			<tr><td colspan=2><hr class="generic"></td></tr>
+	                 			<tr><td colspan=6><hr class="generic"></td></tr>
                  <%	
             	    		}
 	            	

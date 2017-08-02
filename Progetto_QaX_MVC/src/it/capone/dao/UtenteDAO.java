@@ -11,12 +11,19 @@ import java.util.logging.Level;
 
 import com.sun.istack.internal.logging.Logger;
 
+import it.capone.bean.CategoriaBean;
 import it.capone.bean.LoginBean;
 import it.capone.utility.Data;
 
 public class UtenteDAO {
 	
-	
+	/**
+	 * 
+	 * @param loginBean
+	 * @param userId
+	 * @param password
+	 * @return VERIFICA se un dato Utente esiste
+	 */
 	public boolean verifyUtente(LoginBean loginBean, String userId, String password) {
 		Connection conn = null;
 		PreparedStatement ps = null;
@@ -70,6 +77,14 @@ public class UtenteDAO {
 	}
 	
 	
+	/**
+	 * 
+	 * @param loginBean
+	 * @param nome
+	 * @param password
+	 * @param email
+	 * INSERT UTENTE
+	 */
 	public void registraUtente(LoginBean loginBean, String nome, String password, String email) {
 		
 		Connection conn = null;
@@ -130,5 +145,58 @@ public class UtenteDAO {
 		}
 	}
 	
+	
+	/**
+	 * 
+	 * @param idutente
+	 * @param password
+	 * @param email
+	 * @return UPDATE UTENTE
+	 */
+	public static boolean aggiornaUtente(int idutente, String password, String email) {
+		boolean modificato=false;
+		Connection conn=null;
+		PreparedStatement ps = null;
+		try{
+			conn = it.capone.db.ConnectionFactory.getConnection();
+			String query = "UPDATE qax.utente as u SET u.password=?, u.email=? WHERE u.idutente=?";
+			ps = conn.prepareStatement(query);
+			ps.setString(1, password);
+			ps.setString(2, email);
+			ps.setInt(3, idutente);
+			
+			int res = ps.executeUpdate();
+			
+			//il risultato di un executeUpdate corretto è il numero di righe 
+			//modicate dal db, in questo caso è 1
+			if(res != 1) {  
+				Logger.getLogger(DomandaDAO.class.getName(), null).log(Level.SEVERE, "Errore nella query di update utente");
+				modificato = false;
+				throw new RuntimeException("database error in UtenteDAO class");
+				
+			}
+			modificato=true;
+		}
+		catch(SQLException ex){
+			Logger.getLogger(UtenteDAO.class.getName(), null).log(Level.SEVERE, null, ex);
+			System.out.println("Problema in : UtenteDAO class, " +ex.getMessage());
+			return modificato;
+		}
+		finally {
+			try {
+				if(ps != null) {
+					ps.close();
+				}
+				if(conn != null) {
+					conn.close();
+				}
+			}
+			catch(Exception e) {
+				System.out.println("Eccezione generica: " +e.getMessage());
+				e.printStackTrace();
+			}
+		}
+		return modificato;
+	}
 	
 }

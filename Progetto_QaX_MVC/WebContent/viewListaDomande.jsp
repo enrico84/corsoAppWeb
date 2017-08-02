@@ -32,11 +32,12 @@
 					<p>
 						<label>Categoria: <input type="text" name="categoria"></label>
 						<span id="completaCat"></span>
-						<p>
-							<label><input type="submit" value="Cerca"></label>
-						</p>
-						<span id="completaDom"></span>
 					</p>
+					<p>
+						<label><input type="submit" value="Cerca"></label>
+					</p>
+					<span id="completaDom"></span>
+					
 					
 				</form>
 			</div>

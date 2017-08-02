@@ -14,10 +14,15 @@ public class CategoriaBean {
 		this.nome = nome;
 	}
 	
-	public int getId() {
-		return idcategoria;
+	public int getIdcategoria() {
+		return this.idcategoria;
 	}
 
+	
+	public void setIdcategoria(int id) {
+		this.idcategoria=id;
+	}
+	
 
 	public String getNome() {
 		return nome;

@@ -11,13 +11,13 @@ $(document).ready(function(){
 });
 
 
-//Funzione chiamata all'evento "blur" delle caselle di testo Login e Password
+//Funzione chiamata dall'evento "blur" delle caselle di testo Login e Password
 function validaTesto() {
 	
 	//this -> nodo DOM della casella di input
 	//$(this) -> oggetto Jquery relativo alla casella di input
 	var contenuto = $(this).val();
-	if(contenuto.length == 0) {
+	if(contenuto.length <= 0) {
 		$("p#registrationErr").css("color", "red");
 		$("p#registrationErr").text("Il campo " +$(this).attr("name")+ " deve essere valorizzato");
 	} 

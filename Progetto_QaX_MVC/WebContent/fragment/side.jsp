@@ -5,6 +5,7 @@
 <% 
 		if(loginBean.isValidLogin()) {
 			out.println("<h4>Benvenuto "+loginBean.getNome()+"</h4>");
+			out.println("<a href='ControllerUtente?scelta=visualizza&utente="+loginBean.getIdutente()+ "'>Modifica i dati</a>");
 		}
 		else{
 			out.println("<h4>Benvenuto Utente Anonimo</h4>");

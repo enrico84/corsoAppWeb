@@ -9,6 +9,8 @@
 	<link type="text/css" rel="stylesheet" href="css/sito.css"/>
 	<script type="text/javascript" src="js/jquery-3.2.1.js"></script>
 	<script type="text/javascript" src="js/selezionaCategoria.js"></script>
+	<script type="text/javascript" src="js/verifyDomanda.js"></script>
+	<script type="text/javascript" src="js/popolaCategoria.js"></script>
 </head>
 <body>
 	 <jsp:include page="fragment/header.jsp" flush="true"/>
@@ -29,10 +31,14 @@
             		<table>
             		<tr><td>Titolo:</td><td><input type="text" name="titolo"/></td></tr>      
             		<tr><td>Descrizione:</td><td><input type="text" name="descrizione"/></td></tr>
-            		<tr><td>Categoria:</td><td><input type="text" name="categ" /></td></tr>
-            		<!-- <tr><td>Categoria:</td>
-            			<td><select name="selectCategoria"><option value="">Scegli la categoria</option>
-            				</select></td></tr> -->
+            		<tr><td>Categoria:</td>
+            			<td>
+            				<select name="selectCategoria"><option value="">Scegli la categoria</option>
+            			    </select>
+            			</td>
+            		</tr>
+            		<tr><td>Non c'è la categoria? Aggiungila:</td><td><input type="text" name="categ" /></td></tr>
+            		
             		<tr><td><input type="submit" value="Inserisci domanda"/></td><td><input type="reset" value="Resetta i campi"/></td></tr>
             		</table>
             		<!--  <p id="registrationErr"></p> -->

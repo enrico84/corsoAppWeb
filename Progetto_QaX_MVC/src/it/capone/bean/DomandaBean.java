@@ -11,7 +11,6 @@ public class DomandaBean {
 	private String titolo;
 	private String descrizione;
 	private Data datacreazione;
-	private Timestamp datacreaz;
 	private CategoriaBean categoria;
 	private LoginBean utente;
 	private RispostaBean rispostascelta;
@@ -30,17 +29,6 @@ public class DomandaBean {
 	}
 	
 	
-	//Costruttore con parametri
-	public DomandaBean(int iddomanda, String titolo, String descrizione, Timestamp datacreaz, CategoriaBean categoria, 
-			LoginBean utente) {
-		this.iddomanda = iddomanda;
-		this.titolo = titolo;
-		this.descrizione = descrizione;
-		this.datacreaz = datacreaz;
-		this.categoria = categoria;
-		this.utente = utente;
-		}
-	
 	//Costruttore vuoto
 	public DomandaBean() {}
 	
@@ -49,6 +37,9 @@ public class DomandaBean {
 		return iddomanda;
 	}
 
+	public void setIddomanda(int id) {
+		this.iddomanda=id;
+	}
 	
 	public String getTitolo() {
 		return titolo;
@@ -74,32 +65,20 @@ public class DomandaBean {
 		this.datacreazione = datacreazione;
 	}
 	
-	public Timestamp getDatacreaz() {
-		return datacreaz;
-	}
-
-
-	public void setDatacreaz(Timestamp datacreaz) {
-		this.datacreaz = datacreaz;
-	}
-
 	
 	public CategoriaBean getCategoria() {
 		return categoria;
 	}
 
 
-	
 	public void setCategoria(CategoriaBean categoria) {
 		this.categoria = categoria;
 	}
 
 
-	
 	public LoginBean getUtente() {
 		return utente;
 	}
-
 
 	
 	public void setUtente(LoginBean utente) {

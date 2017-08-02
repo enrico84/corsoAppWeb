@@ -309,7 +309,7 @@ public class DomandaDAO {
 	    	conn = it.capone.db.ConnectionFactory.getConnection();
 	    	st = conn.createStatement();
 	    	String query = "SELECT * FROM qax.domanda as d, qax.utente as u "
-	    				   + "WHERE d.idutente=u.idutente AND u.nome='"+username+"' AND u.password='"+password+"' ORDER BY d.datacreazione";
+	    				   + "WHERE d.idutente=u.idutente AND u.nome='"+username+"' AND u.password='"+password+"' ORDER BY d.datacreazione DESC";
 	    	rs=st.executeQuery(query); 
 	    	while(rs.next()) {
 		    	Timestamp d = rs.getTimestamp("datacreazione");
@@ -381,67 +381,42 @@ public class DomandaDAO {
 	 * @param categoria
 	 * @param utente
 	 * @param datacreazione
-	 * @return Un oggetto Domanda
 	 */
-	public void creaDomanda(DomandaBean domanda, String titolo, String descrizione, String categoria, LoginBean utente) 
+	public void creaDomanda(String titolo, String descrizione, String categoria, LoginBean utente) 
 	{
 		
 		Connection conn = null;
 		PreparedStatement ps=null;
-	    ResultSet rs = null;
-	    
+	   
 	    try {
 	    	conn = it.capone.db.ConnectionFactory.getConnection();
-	    	CategoriaBean categ= prendiCategoriaByNome(categoria);
+	    	CategoriaBean categ = prendiCategoriaByNome(categoria);
 	    	//Se la categoria non esiste la aggiungo nella tabella qax.Categoria
 	    	if(categ == null) {
 	    		int maxidCategoria = getMaxId("qax.categoria", "idcategoria");
 	    		maxidCategoria++;
 	    		PreparedStatement pss=null;
-	    	    ResultSet rss = null;
 	    		pss=conn.prepareStatement("INSERT INTO qax.categoria(idcategoria, nome) VALUES (?, ?)"); 
 	    		pss.setInt(1, maxidCategoria);
 	    		pss.setString(2, categoria);
 	    		
 	    		pss.executeUpdate();
-			    rss=pss.getResultSet();
-		        rss.next();
-				int id = rss.getInt(1);
-				categ = new CategoriaBean(id, categoria);
+				categ = new CategoriaBean(maxidCategoria, categoria);
 				pss.close();
-				rss.close();
 	    	}
-	    	//Se la Categoria esiste, gliela passo
 	    		
 	    	ps=conn.prepareStatement("INSERT INTO qax.domanda(iddomanda, titolo, descrizione, categoria, idutente, datacreazione) "+
-	                 "VALUES (?, ?, ?, ?, now())");
+	                 "VALUES (?, ?, ?, ?, ?, now())");
 	    	
 	    	int maxidDomanda = getMaxId("qax.domanda", "iddomanda");
 	    	maxidDomanda++;
 	    	ps.setInt(1, maxidDomanda);
 	    	ps.setString(2, titolo);
 		    ps.setString(3, descrizione);
-		    ps.setInt(4, categ.getId());
-		  
+		    ps.setInt(4, categ.getIdcategoria());
 		    ps.setInt(5, utente.getIdutente());
 		 
 			ps.executeUpdate();
-			rs=ps.getResultSet();
-			rs.next();
-	        
-			int id = rs.getInt(1);
-			
-			Timestamp d = rs.getTimestamp("datacreazione");
-            GregorianCalendar gc = new GregorianCalendar();
-            gc.setTime(d);
-            Data nuovaData = new Data(
-     				 gc.get(GregorianCalendar.YEAR),
-      		         gc.get(GregorianCalendar.MONTH) + 1,
-      		         gc.get(GregorianCalendar.DATE)
-      		         );
-            
-            
-            domanda = new DomandaBean(id, titolo, descrizione, nuovaData, categ, utente);
 			
 	    }	
 		catch(SQLException ex)
@@ -452,10 +427,6 @@ public class DomandaDAO {
 	    finally
 	    {
 	        try {
-	             if(rs != null)
-	             {
-	                rs.close();
-	             }
 	             if(ps != null){
 	                ps.close();
 	             }
@@ -468,6 +439,113 @@ public class DomandaDAO {
 	        	System.out.println("Eccezione: " +ex1.getMessage());
 	        }
 	   }
+	}
+	
+	
+	public void aggiornaDomanda(CategoriaBean categoriaBean, int iddomanda, String titolo, String descrizione, 
+			                       String categoria) {
+		Connection conn=null;
+		PreparedStatement ps = null;
+		try{
+			conn = it.capone.db.ConnectionFactory.getConnection();
+			categoriaBean = prendiCategoriaByNome(categoria);
+			//Se la categoria non esiste la aggiungo nella tabella qax.Categoria
+	    	if(categoriaBean == null) {
+	    		int maxidCategoria = getMaxId("qax.categoria", "idcategoria");
+	    		maxidCategoria++;
+	    		PreparedStatement pss=null;
+	    		pss=conn.prepareStatement("INSERT INTO qax.categoria(idcategoria, nome) VALUES (?, ?)"); 
+	    		pss.setInt(1, maxidCategoria);
+	    		pss.setString(2, categoria);
+	    		
+	    		pss.executeUpdate();
+	    		categoriaBean = new CategoriaBean(maxidCategoria, categoria);
+				pss.close();
+	    	}
+			String query = "UPDATE qax.domanda as d SET d.titolo=?, d.descrizione=?, d.categoria=? WHERE iddomanda=?";
+			ps = conn.prepareStatement(query);
+			ps.setString(1, titolo);
+			ps.setString(2, descrizione);
+			ps.setInt(3, categoriaBean.getIdcategoria());
+			ps.setInt(4, iddomanda);
+			
+			int res = ps.executeUpdate();
+			
+			//il risultato di un executeUpdate corretto è il numero di righe 
+			//modicate dal db, in questo caso è 1
+			if(res != 1) {  
+				Logger.getLogger(DomandaDAO.class.getName(), null).log(Level.SEVERE, "Errore nella query di update domanda");
+				throw new RuntimeException("database error in "+this.getClass().getSimpleName());
+			}
+		}
+		catch(SQLException ex){
+			Logger.getLogger(DomandaDAO.class.getName(), null).log(Level.SEVERE, null, ex);
+			System.out.println("Problema in : " +this.getClass().getSimpleName()+ ", " +ex.getMessage());
+			
+		}
+		finally {
+			try {
+				if(ps != null) {
+					ps.close();
+				}
+				if(conn != null) {
+					conn.close();
+				}
+			}
+			catch(Exception e) {
+				System.out.println("Eccezione generica: " +e.getMessage());
+				e.printStackTrace();
+			}
+			
+		}
+	}
+	
+	
+	public void eliminaDomanda(int idDomanda) {
+		
+		Connection conn = null;
+		PreparedStatement ps = null;
+		try {
+			conn = it.capone.db.ConnectionFactory.getConnection();
+			String query1 = "DELETE FROM qax.risposta WHERE iddomanda=?";
+			ps=conn.prepareStatement(query1);
+			ps.setInt(1, idDomanda);
+			int res = ps.executeUpdate();
+//			if (res != 1) {
+//            	throw new SQLException("Risposte alla domanda non eliminate");
+//            }
+			if(ps != null)
+				ps.close();
+			
+			String query2="DELETE FROM qax.domanda WHERE iddomanda=?";
+            ps=conn.prepareStatement(query2);
+            ps.setInt(1, idDomanda);
+            res = ps.executeUpdate();
+//            if (res != 1) {
+//            	throw new SQLException("Domanda non eliminata");
+//            }
+			
+		}
+		catch(SQLException ex) {
+			Logger.getLogger(DomandaDAO.class.getName(), null).log(Level.SEVERE, null, ex);
+	    	System.out.println("Problema in eliminaDomanda:  " +ex.getMessage());
+		}
+		finally {
+			try {
+				if(conn != null) 
+					conn.close();
+				
+				if(ps != null)
+					ps.close();
+				
+			}
+			catch(Exception e) {
+				System.out.println("Eccezione generica: " +e.getMessage());
+				e.printStackTrace();
+			}
+			
+		}
+		
 	}
 	
 	
@@ -511,7 +589,7 @@ public class DomandaDAO {
 	 * @param id
 	 * @return Un oggetto Utente
 	 */
-	private static LoginBean prendiUtente(int id){
+	public static LoginBean prendiUtente(int id){
 	        Connection conn = null;
 	        PreparedStatement ps = null;
 	        ResultSet rs = null;
@@ -614,8 +692,6 @@ public class DomandaDAO {
         Connection conn = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        //boolean exists = false;
-        //HashMap<Integer, String> mapCategory = new HashMap<Integer, String>();
         try {
         	conn = it.capone.db.ConnectionFactory.getConnection();    
             ps = conn.prepareStatement("SELECT * FROM qax.categoria as q WHERE q.nome = ?" );
@@ -626,8 +702,7 @@ public class DomandaDAO {
             if(rs.next())
             	categoria = new CategoriaBean(rs.getInt("idcategoria"),
 						  rs.getString("nome"));
-            	//mapCategory.put(rs.getInt(1), rs.getString(2));
-             
+            	
             return categoria;
         } catch (SQLException ex) {
         	Logger.getLogger(DomandaDAO.class.getName(), null).log(Level.SEVERE, null, ex);
@@ -657,7 +732,7 @@ public class DomandaDAO {
 	 * @param id
 	 * @return Un oggetto Domanda
 	 */
-	private static DomandaBean prendiDomanda(int iddomanda) {
+	public DomandaBean prendiDomanda(int iddomanda) {
 		
 		Connection conn = null;
 		PreparedStatement ps = null;
