@@ -727,6 +727,88 @@ public class DomandaDAO {
     }
 
 	
+	public void creaDomanda(DomandaBean domanda, String titolo, String descrizione, String categoria, LoginBean utente) 
+	{
+		
+		Connection conn = null;
+		PreparedStatement ps=null;
+	    ResultSet rs = null;
+	    
+	    try {
+	    	conn = it.capone.db.ConnectionFactory.getConnection();
+	    	CategoriaBean categ = prendiCategoriaByNome(categoria);
+	    	//Se la categoria non esiste la aggiungo nella tabella qax.Categoria
+	    	if(categ == null) {
+	    		int maxidCategoria = getMaxId("qax.categoria", "idcategoria");
+	    		maxidCategoria++;
+	    		PreparedStatement pss=null;
+	    		pss=conn.prepareStatement("INSERT INTO qax.categoria(idcategoria, nome) VALUES (?, ?)"); 
+	    		pss.setInt(1, maxidCategoria);
+	    		pss.setString(2, categoria);
+	    		
+	    		pss.executeUpdate();
+				categ = new CategoriaBean(maxidCategoria, categoria);
+				pss.close();
+	    	}
+	    	//Se la Categoria esiste, gliela passo
+	    		
+	    	ps=conn.prepareStatement("INSERT INTO qax.domanda(iddomanda, titolo, descrizione, categoria, idutente, datacreazione) "+
+	                 "VALUES (?, ?, ?, ?, ?, now())", Statement.RETURN_GENERATED_KEYS);
+	    	
+	    	int maxidDomanda = getMaxId("qax.domanda", "iddomanda");
+	    	maxidDomanda++;
+	    	ps.setInt(1, maxidDomanda);
+	    	ps.setString(2, titolo);
+		    ps.setString(3, descrizione);
+		    ps.setInt(4, categ.getIdcategoria());
+		    ps.setInt(5, utente.getIdutente());
+		 
+			ps.executeUpdate();
+//			rs=ps.getGeneratedKeys();
+//			rs.next();
+//	        
+//			int id = rs.getInt(1);
+//			
+//			Timestamp d = rs.getTimestamp("datacreazione");
+//            GregorianCalendar gc = new GregorianCalendar();
+//            gc.setTime(d);
+//            Data nuovaData = new Data(
+//     				 gc.get(GregorianCalendar.YEAR),
+//      		         gc.get(GregorianCalendar.MONTH) + 1,
+//      		         gc.get(GregorianCalendar.DATE)
+//      		         );
+//            
+//            
+//            domanda = new DomandaBean(id, titolo, descrizione, nuovaData, categ, utente);
+			
+	    }	
+		catch(SQLException ex)
+	    {
+			Logger.getLogger(DomandaDAO.class.getName(), null).log(Level.SEVERE, null, ex);
+	    	System.out.println("Problema in : " +this.getClass().getSimpleName()+ ", " +ex.getMessage());
+	    }
+	    finally
+	    {
+	        try {
+	             if(rs != null)
+	             {
+	                rs.close();
+	             }
+	             if(ps != null){
+	                ps.close();
+	             }
+	             if(conn != null){
+	                conn.close();
+	             }
+	        }
+	        catch(Exception ex1)
+	        {
+	        	System.out.println("Eccezione: " +ex1.getMessage());
+	        }
+	   }
+	}
+	
+	
 	/**
 	 * 
 	 * @param id

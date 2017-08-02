@@ -49,6 +49,7 @@
 	                 			<tr><td>Data: </td><td><%=datacreazione %></td></tr>
 	                 			<tr><td>Categoria:</td><td><span class="cat"><%=categoria %></span></td></tr>
 	                 			<tr><td colspan=6><hr class="generic"></td></tr>
+
                  <%	
             	    		}
 	            	
