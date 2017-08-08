@@ -1,5 +1,5 @@
 <%@page import="it.capone.bean.ListaDomandeBean"%><%@page import="it.capone.bean.DomandaBean"%><%@
-page import="it.capone.dao.DomandaDAO"%><%@page import="it.capone.utility.Data"%><%@
+page import="it.capone.service.CGestioneDomande"%><%@page import="it.capone.utility.Data"%><%@
 page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%><jsp:useBean 
 id="listaDomande" class="it.capone.bean.ListaDomandeBean" scope="request"/><%
     
@@ -7,10 +7,16 @@ String catDomanda = request.getParameter("categoriaDomanda");
     
 if(catDomanda != null && !catDomanda.equals("")) {
     //creo un oggetto dao che interagisce con il db
-    DomandaDAO domandaDAO = new DomandaDAO();
-       
+    //DomandaDAO domandaDAO = new DomandaDAO();
+    CGestioneDomande cGestDom = (CGestioneDomande)request.getSession().getAttribute("cGestDom");
+    if(cGestDom == null) {
+    	cGestDom = new CGestioneDomande();
+        request.getSession().setAttribute("cGestDom", cGestDom);
+    }
+    
+    
     //l'oggetto dao interrogherà il db e popolerà il bean "listadomande" con il risultato della query
-    domandaDAO.getDomande(listaDomande, catDomanda);
+    cGestDom.getDomande(listaDomande, catDomanda);
     
     if(!listaDomande.getListaDomande().isEmpty()) {
     

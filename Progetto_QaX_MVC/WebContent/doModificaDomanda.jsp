@@ -5,7 +5,8 @@
 	3. Dopo l'update si passa al Controller "doMieDomande.jsp", il quale elaborerà la nuova lista 
 	   di domande che saranno visualizzate dalla View 
  --><%@page 
-         import="it.capone.dao.DomandaDAO" %><jsp:useBean 
+         import="it.capone.dao.DomandaDAO" %><%@page
+         import="it.capone.service.CGestioneDomande" %><jsp:useBean 
          id="domandaBean" class="it.capone.bean.DomandaBean" scope="request"/><jsp:useBean 
          id="categoriaBean" class="it.capone.bean.CategoriaBean" scope="request"/><jsp:useBean 
          id="errBean" class="it.capone.utility.ErrMsg" scope="request"/><jsp:setProperty 
@@ -17,6 +18,7 @@
 
 <% 
 	DomandaDAO domandaDAO = new DomandaDAO();
+    CGestioneDomande cGestDom = (CGestioneDomande)request.getSession().getAttribute("cGestDom");
 	
 	if(domandaBean.getTitolo() == null || domandaBean.getTitolo().equals("")) {
 		errBean.add("Il titolo non deve essere vuoto");
@@ -40,7 +42,9 @@
 	}
 	else {
 		
-		domandaDAO.aggiornaDomanda(categoriaBean, domandaBean.getIddomanda(), domandaBean.getTitolo(), 
+		//domandaDAO.aggiornaDomanda(categoriaBean, domandaBean.getIddomanda(), domandaBean.getTitolo(), 
+                //domandaBean.getDescrizione(), categoriaBean.getNome());
+		cGestDom.aggiornaDomanda(categoriaBean, domandaBean.getIddomanda(), domandaBean.getTitolo(), 
                 domandaBean.getDescrizione(), categoriaBean.getNome());
 %>	
 		<jsp:forward page="doMieDomande.jsp"/>

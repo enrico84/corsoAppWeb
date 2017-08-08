@@ -1,4 +1,4 @@
-<%@page import="it.capone.dao.CategoriaDAO"%><%@page import="java.util.List;"%><%@
+<%@page import="it.capone.service.CGestioneCategoria"%><%@page import="java.util.List;"%><%@
 page language="java" contentType="text/plain; charset=UTF-8" pageEncoding="UTF-8"%><%
 
 //CONTROLLER
@@ -10,9 +10,13 @@ page language="java" contentType="text/plain; charset=UTF-8" pageEncoding="UTF-8
 //Il DAO effettua una query al DB tornando una lista delle categorie che cominciano con la parola inviata in "testo"
 
 String testo = request.getParameter("categoria");   
+CGestioneCategoria cGestCat = (CGestioneCategoria)request.getSession().getAttribute("cGestCat");
+if(cGestCat == null) {
+	cGestCat = new CGestioneCategoria();
+    request.getSession().setAttribute("cGestCat", cGestCat);
+}
 
-CategoriaDAO cat = new CategoriaDAO();
-List<String> completamenti = cat.getCompletamenti(testo);
+List<String> completamenti = cGestCat.getCompletamenti(testo);
 for (String s : completamenti){
 	out.print(s+" ");
 		

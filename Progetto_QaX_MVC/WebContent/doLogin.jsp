@@ -6,7 +6,8 @@
 	3) Se tutto OK alla fine va alla HomePage 
 --><%@page 
 import="javafx.beans.property.SetProperty"%><%@page 
-import="it.capone.dao.UtenteDAO, it.capone.bean.LoginBean" %><jsp:useBean 
+import="it.capone.dao.UtenteDAO, it.capone.bean.LoginBean" %><%@page
+import="it.capone.service.CGestioneUtente" %><jsp:useBean 
   id="loginBean" class="it.capone.bean.LoginBean" scope="session" /><jsp:useBean 
   id="errBean"   class="it.capone.utility.ErrMsg" scope="request" /><% 
   
@@ -26,8 +27,18 @@ import="it.capone.dao.UtenteDAO, it.capone.bean.LoginBean" %><jsp:useBean
     }
     
 	
-	UtenteDAO utenteDAO = new UtenteDAO();
-	boolean exist = utenteDAO.verifyUtente(loginBean, nome, password);
+    // Creo un oggetto CONTROLLER "CGestioneUtente" che mi durerà per tutta la sessione utente, e che 
+ 	// mi porto avanti negli altri Controller
+    CGestioneUtente cGestUt = (CGestioneUtente)request.getSession().getAttribute("cGestUt");
+    if(cGestUt == null) {
+    	cGestUt = new CGestioneUtente();
+        request.getSession().setAttribute("cGestUt", cGestUt);
+    }
+    
+	//UtenteDAO utenteDAO = new UtenteDAO();
+	//boolean exist = utenteDAO.verifyUtente(loginBean, nome, password);
+	boolean exist = cGestUt.verifyUtente(loginBean, nome, password);
+	
 	//login.setNome(nome);
 	//login.setPassword(password);
 	if(exist)  

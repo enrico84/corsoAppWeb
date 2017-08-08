@@ -4,7 +4,6 @@
 $(document).ready(function(){
 	//Event-handler che uso per registrare gli eventi al caricamento della pagina
 	$("select[name='selectCategoria']").focus(popola);
-	$("select[name='selectCategoria']").change(prova);
 	
 	//Utilizzo di un'altra funzione anonima per registre l'evento del click
 //	$("option").click(function() { 
@@ -35,10 +34,6 @@ function popola() {
 	
 }
 
-function prova() {
-	
-	//alert("hai selezionato un tag option");
-}
 
 
 

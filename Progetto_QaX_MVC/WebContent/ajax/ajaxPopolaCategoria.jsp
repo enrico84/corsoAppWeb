@@ -1,14 +1,20 @@
-<%@ page import="it.capone.dao.CategoriaDAO; import java.util.Map;"%><%@ 
+<%@ page import="it.capone.service.CGestioneCategoria; import java.util.Map;"%><%@ 
     page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%><% 
 	
-   CategoriaDAO categoriaDAO = new CategoriaDAO();
+    CGestioneCategoria cGestCat = (CGestioneCategoria)request.getSession().getAttribute("cGestCat");
+    if(cGestCat == null) {
+    	cGestCat = new CGestioneCategoria();
+        request.getSession().setAttribute("cGestCat", cGestCat);
+    }
+ 
+    
    Map<Integer, String> categorie = null;
-   categorie = categoriaDAO.getCategorie();
+   categorie = cGestCat.getCategorie();
    
    if(!categorie.isEmpty()) {
 	   
 	   for (Map.Entry<Integer, String> cat : categorie.entrySet()) {
-	   		out.println( "<option value='"+cat.getKey()+"'> " +cat.getValue()+ "</option>" );
+	   		out.println( "<option value='"+cat.getValue()+"'> " +cat.getValue()+ "</option>" );
 	   }
 	   out.println( "<option value=''>Seleziona una categoria </option>" );
    }

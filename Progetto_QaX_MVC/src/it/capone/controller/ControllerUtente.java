@@ -12,7 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import it.capone.bean.LoginBean;
 import it.capone.dao.UtenteDAO;
-
+import it.capone.service.CGestioneDomande;
+import it.capone.service.CGestioneUtente;
 
 /**
  * Servlet implementation class ControllerUtente
@@ -31,14 +32,21 @@ public class ControllerUtente extends HttpServlet {
            
 	        if(request.getParameter("scelta") != null)
 	        {
-	        	
+	        	CGestioneDomande cGestDom = (CGestioneDomande)request.getSession().getAttribute("cGestDom");
+	            if(cGestDom == null) {
+	            	cGestDom = new CGestioneDomande();
+	                request.getSession().setAttribute("cGestDom", cGestDom);
+	            }
 	        	if(request.getParameter("scelta").equals("visualizza")) {
-	        	   
+	      
 	        		String utente = request.getParameter("utente");
 		        	Integer idUtente = Integer.parseInt(utente);
-		        	//Prendo l'utente dal Database tremite l'id passatomi dalla View "side.jsp"
-		        	LoginBean utenteBean = it.capone.dao.DomandaDAO.prendiUtente(idUtente);
 		        	
+		        	//Prendo l'utente dal Database tremite l'id passatomi dalla View "side.jsp"
+		        	
+		        	//LoginBean utenteBean = it.capone.dao.DomandaDAO.prendiUtente(idUtente);
+		            LoginBean utenteBean = cGestDom.prendiUtente(idUtente);
+		            
 	        	   //L'utente recuperato lo setto come variabile di sessione e me lo porto avanti 
 	        	   //recuperandolo successivamente
 	        	   request.getSession().setAttribute("utenteBean", utenteBean);
@@ -58,11 +66,14 @@ public class ControllerUtente extends HttpServlet {
 			           Integer idUtente = Integer.parseInt(utente);
 			           
 			           //Prendo l'utente dal Database dato l'id passatomi dalla View "viewModificaUtente.jsp"
-			           LoginBean utenteBean = it.capone.dao.DomandaDAO.prendiUtente(idUtente);
-	        		   String password = request.getParameter("password");
+			           
+			           //LoginBean utenteBean = it.capone.dao.DomandaDAO.prendiUtente(idUtente);
+			           LoginBean utenteBean = cGestDom.prendiUtente(idUtente);
+	        		   
+			           String password = request.getParameter("password");
 	        		   String email = request.getParameter("email");
 		        	   
-		        	   modificato = modificaUtente(idUtente, password, email);
+		        	   modificato = modificaUtente(request, idUtente, password, email);
 		        	   
 		        	   if(modificato) {
 		        		   
@@ -98,9 +109,16 @@ public class ControllerUtente extends HttpServlet {
 	
 	
 	
-	private boolean modificaUtente(int idUtente, String password, String email) {
+	private boolean modificaUtente(HttpServletRequest request, int idUtente, String password, String email) {
 		
-		boolean modificato = UtenteDAO.aggiornaUtente(idUtente, password, email);
+		CGestioneUtente cGestUt = (CGestioneUtente)request.getSession().getAttribute("cGestUt");
+        if(cGestUt == null) {
+        	cGestUt = new CGestioneUtente();
+            request.getSession().setAttribute("cGestUt", cGestUt);
+        }
+		
+		//boolean modificato = UtenteDAO.aggiornaUtente(idUtente, password, email);
+        boolean modificato = cGestUt.aggiornaUtente(idUtente, password, email);
 		return modificato;
 	}
 		
