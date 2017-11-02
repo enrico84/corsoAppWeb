@@ -1,5 +1,5 @@
 <!-- 
-	CONTROLLER inserimento domands
+	CONTROLLER inserimento domanda
 	Prende i dati dalla "viewCreaDomanda.jsp" e li invia al DAO
 	Il DAO domandaDAO eseguirà una query di inserimento al db, tornando il risultato atteso
  -->
