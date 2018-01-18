@@ -13,5 +13,7 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
+	<classpathentry kind="con" path="org.eclipse.datatools.connectivity.jdt.DRIVERLIBRARY/MySQL JDBC Qax_driver"/>
+	<classpathentry kind="lib" path="C:/Users/Enrico/git/Qax-JDBC.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
